@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
-
-
-
-public class CameraHelper {
+public class CameraHelper 
+{
 	private static final String TAG = CameraHelper.class.getName();
 	
 	private final float MAX_ZOOM_IN = 0.25f;
@@ -24,6 +22,9 @@ public class CameraHelper {
 		zoom = 1.0f;
 	}
 	
+	/*
+	 * update the target
+	 */
 	public void update (float deltaTime)
 	{
 		if (!hasTarget()) return;
@@ -32,49 +33,81 @@ public class CameraHelper {
 		position.y = target.getY() + target.getOriginY();
 	}
 	
+	/*
+	 * set the position
+	 */
 	public void setPosition (float x, float y)
 	{
 		this.position.set(x,y);
 	}
 	
+	/*
+	 * get the position
+	 */
 	public Vector2 getPosition ()
 	{
 		return position;
 	}
 	
+	/*
+	 * add zoom to the amount
+	 */
 	public void addZoom (float amount)
 	{
 		setZoom(zoom+amount);
 	}
 
-	public void setZoom(float zoom) {
+	/*
+	 * set the zoom of the camera
+	 */
+	public void setZoom(float zoom) 
+	{
 		this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);		
 	}
 	
+	/*
+	 * get the zoom of the camera
+	 */
 	public float getZoom()
 	{
 		return zoom;
 	}
 	
+	/*
+	 * set the target
+	 */
 	public void setTarget(Sprite target)
 	{
 		this.target = target;
 	}
 	
+	/*
+	 * get the target
+	 */
 	public Sprite getTarget ()
 	{
 		return target;
 	}
 	
+	/*
+	 * cheeck if it has the target
+	 */
 	public boolean hasTarget () 
 	{
 		return target != null;
 	}
 	
+	/*
+	 * check it it has a target with a parameter
+	 */
 	public boolean hasTarget (Sprite target)
 	{
 		return hasTarget() && this.target.equals(target);
 	}
+	
+	/*
+	 * apply to the camera
+	 */
 	public void applyTo(OrthographicCamera camera) 
 	{
 		camera.position.x = position.x;
