@@ -10,4 +10,7 @@ public class Constants {
 	
 	//Location of description file for texture atlas
 	public static final String TEXTURE_ATLAS_OBJECTS = "images/perkypooch.pack.atlas";
+	
+	//location of image file for level 01
+	public static final String LEVEL_01 = "levels/levelmap_perkypooch01";
 }
