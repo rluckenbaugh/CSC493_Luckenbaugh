@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.luckenbaughgdx.game.Assets;
 
 
-
 public class LuckenbaughGdxGame extends ApplicationAdapter{
 	private static final String TAG = LuckenbaughGdxGame.class.getName();
 	

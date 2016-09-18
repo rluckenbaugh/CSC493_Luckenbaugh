@@ -47,9 +47,11 @@ public class WorldController extends InputAdapter
 		testSprites = new Sprite[5];
 		//create a list of texture regions
 		Array<TextureRegion> regions = new Array<TextureRegion>();
-		regions.add(Assets.instance.bunny.head);
-		regions.add(Assets.instance.feather.feather);
-		regions.add(Assets.instance.goldCoin.goldCoin);
+		regions.add(Assets.instance.pooch.stand);
+		regions.add(Assets.instance.treat.treats);
+		regions.add(Assets.instance.bee.bee);
+		regions.add(Assets.instance.pile.pile);
+		regions.add(Assets.instance.bone.bone);
 		//Create empty POT-sized Pixmap with 8 bit RGBA pixel data
 		//int width = 32;
 		//int height = 32;

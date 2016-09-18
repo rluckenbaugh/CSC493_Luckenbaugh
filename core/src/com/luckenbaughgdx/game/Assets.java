@@ -19,10 +19,14 @@ public class Assets implements Disposable, AssetErrorListener
 	private AssetManager assetManager;
 	
 	
-	public AssetBunny bunny;
-	public AssetRock rock;
-	public AssetGoldCoin goldCoin;
-	public AssetFeather feather;
+	public AssetPooch pooch;
+	public AssetGround ground;
+	public AssetTreat treat;
+	public AssetBone bone;
+	public AssetBee bee;
+	public AssetPile pile;
+	public AssetHeart heart;
+	public AssetMedal medal;
 	public AssetLevelDecoration levelDecoration;
 	
 	
@@ -57,65 +61,134 @@ public class Assets implements Disposable, AssetErrorListener
 	}
 	
 	//create game resource objects
-	bunny = new AssetBunny(atlas);
-	rock = new AssetRock(atlas);
-	goldCoin = new AssetGoldCoin(atlas);
-	feather = new AssetFeather(atlas);
+	pooch = new AssetPooch(atlas);
+	ground = new AssetGround(atlas);
+	treat = new AssetTreat(atlas);
+	bone = new AssetBone(atlas);
+	bee = new AssetBee(atlas);
+	pile = new AssetPile(atlas);
+	heart = new AssetHeart(atlas);
+	medal = new AssetMedal(atlas);
 	levelDecoration = new AssetLevelDecoration(atlas);
 	
 	}
 	
 	/*
-	 * bunny image
+	 * pooch image
 	 */
-	public class AssetBunny
+	public class AssetPooch
 	{
-		public final AtlasRegion head;
+		public final AtlasRegion stand;
+		public final AtlasRegion sit;
+		public final AtlasRegion lunge;
+		public final AtlasRegion run;
 		
-		public AssetBunny (TextureAtlas atlas)
+		public AssetPooch (TextureAtlas atlas)
 		{
-			head = atlas.findRegion("bunny_head");
+			stand = atlas.findRegion("dog2");
+			sit = atlas.findRegion("dog1");
+			lunge = atlas.findRegion("dog3");
+			run = atlas.findRegion("dog4");
+			
 		}
 	}
 	
 	/*
-	 * rock image
+	 * ground images
 	 */
-	public class AssetRock
+	public class AssetGround
 	{
-		public final AtlasRegion edge;
-		public final AtlasRegion middle;
+		public final AtlasRegion shortgrass;
+		public final AtlasRegion longgrass;
 		
-		public AssetRock (TextureAtlas atlas)
+		public AssetGround (TextureAtlas atlas)
 		{
-			edge = atlas.findRegion("rock_edge");
-			middle = atlas.findRegion("rock_middle");
+			shortgrass = atlas.findRegion("ground1");
+			longgrass = atlas.findRegion("ground2");
 		}
 	}
 	
 	/*
-	 * gold coin image
+	 * treat image
 	 */
-	public class AssetGoldCoin
+	public class AssetTreat
 	{
-		public final AtlasRegion goldCoin;
+		public final AtlasRegion treats;
 		
-		public AssetGoldCoin (TextureAtlas atlas)
+		public AssetTreat (TextureAtlas atlas)
 		{
-			goldCoin = atlas.findRegion("item_gold_coin");
+			treats = atlas.findRegion("treat");
 		}
 	}
 	
 	/*
-	 * feather image
+	 * bone image
 	 */
-	public class AssetFeather
+	public class AssetBone
 	{
-		public final AtlasRegion feather;
+		public final AtlasRegion bone;
 		
-		public AssetFeather (TextureAtlas atlas)
+		public AssetBone (TextureAtlas atlas)
 		{
-			feather = atlas.findRegion("item_feather");
+			bone = atlas.findRegion("bigbone");
+		}
+	}
+	
+	/*
+	 * bee image
+	 */
+	public class AssetBee
+	{
+		public final AtlasRegion bee;
+		
+		public AssetBee (TextureAtlas atlas)
+		{
+			bee = atlas.findRegion("bee");
+		}
+	}
+	/*
+	 * pile image
+	 */
+	public class AssetPile
+	{
+		public final AtlasRegion pile;
+		
+		public AssetPile (TextureAtlas atlas)
+		{
+			pile = atlas.findRegion("dogpoop");
+		}
+	}
+	/*
+	 * heart images
+	 */
+	public class AssetHeart
+	{
+		public final AtlasRegion full;
+		public final AtlasRegion half;
+		public final AtlasRegion empty;
+		
+		public AssetHeart (TextureAtlas atlas)
+		{
+			full = atlas.findRegion("heart1");
+			half = atlas.findRegion("heart2");
+			empty = atlas.findRegion("heart3");
+		}
+	}
+	/*
+	 * bone image
+	 */
+	public class AssetMedal
+	{
+		public final AtlasRegion gold;
+		public final AtlasRegion silver;
+		public final AtlasRegion bronze;
+
+		
+		public AssetMedal (TextureAtlas atlas)
+		{
+			gold = atlas.findRegion("gold");
+			silver = atlas.findRegion("silver");
+			bronze = atlas.findRegion("bronze");
 		}
 	}
 	
@@ -124,21 +197,25 @@ public class Assets implements Disposable, AssetErrorListener
 	 */
 	public class AssetLevelDecoration
 	{
-		public final AtlasRegion cloud01;
-		public final AtlasRegion cloud02;
-		public final AtlasRegion cloud03;
-		public final AtlasRegion mountainLeft;
-		public final AtlasRegion mountainRight;
-		public final AtlasRegion waterOverlay;
+		public final AtlasRegion grass;
+		public final AtlasRegion grass2;
+		public final AtlasRegion grass3;
+		public final AtlasRegion fence;
+		public final AtlasRegion flower1;
+		public final AtlasRegion flower2;
+		public final AtlasRegion cloud;
+		public final AtlasRegion house;
 		
 		public AssetLevelDecoration (TextureAtlas atlas)
 		{
-			cloud01 = atlas.findRegion("cloud01");
-			cloud02 = atlas.findRegion("cloud02");
-			cloud03 = atlas.findRegion("cloud03");
-			mountainLeft = atlas.findRegion("mountain_left");
-			mountainRight = atlas.findRegion("mountain_right");
-			waterOverlay = atlas.findRegion("water_overlay");
+			grass = atlas.findRegion("grass");
+			grass2 = atlas.findRegion("grass2");
+			grass3 = atlas.findRegion("grass3");
+			fence = atlas.findRegion("cream-picket-fence-hi");
+			flower1 = atlas.findRegion("flower1");
+			flower2 = atlas.findRegion("flower2");
+			cloud = atlas.findRegion("cloud");
+			house = atlas.findRegion("house");
 		}
 		
 	}

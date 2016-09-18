@@ -9,5 +9,5 @@ public class Constants {
 	public static final float VIEWPORT_HEIGHT = 5.0f;
 	
 	//Location of description file for texture atlas
-	public static final String TEXTURE_ATLAS_OBJECTS = "images/canyonbunny.pack.atlas";
+	public static final String TEXTURE_ATLAS_OBJECTS = "images/perkypooch.pack.atlas";
 }

@@ -25,11 +25,11 @@ public class DesktopLauncher {
 			settings.maxHeight = 1024;
 			settings.duplicatePadding = false;
 			settings.debug = drawDebugOutline;
-			TexturePacker.process(settings, "assets-raw/images", "../core/assets/images", "canyonbunny.pack");
+			TexturePacker.process(settings, "assets-raw/images", "../core/assets/images", "perkypooch.pack");
 		}
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "CanyonBunny";
+		config.title = "PerkyPooch";
 		config.width = 800;
 		config.height = 480;
 		
