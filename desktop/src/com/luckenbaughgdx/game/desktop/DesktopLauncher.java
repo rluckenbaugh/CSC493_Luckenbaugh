@@ -13,7 +13,8 @@ public class DesktopLauncher {
 	static boolean rebuildAtlas = false;
 	static boolean drawDebugOutline = false;
 	
-	public static void main (String[] arg) {
+	public static void main (String[] arg) 
+	{
 
 		/*
 		 * build the texture atlas and the texture png
