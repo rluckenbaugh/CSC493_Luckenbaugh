@@ -20,7 +20,7 @@ bigbone
   index: -1
 bronze
   rotate: false
-  xy: 361, 17
+  xy: 419, 17
   size: 40, 52
   orig: 40, 52
   offset: 0, 0
@@ -81,16 +81,23 @@ dogpoop
   orig: 74, 51
   offset: 0, 0
   index: -1
+edge
+  rotate: false
+  xy: 594, 79
+  size: 16, 64
+  orig: 16, 64
+  offset: 0, 0
+  index: -1
 flower1
   rotate: false
-  xy: 403, 26
+  xy: 461, 30
   size: 34, 43
   orig: 34, 43
   offset: 0, 0
   index: -1
 flower2
   rotate: false
-  xy: 646, 127
+  xy: 756, 290
   size: 29, 45
   orig: 29, 45
   offset: 0, 0
@@ -104,21 +111,21 @@ gold
   index: -1
 grass
   rotate: false
-  xy: 762, 373
+  xy: 754, 337
   size: 35, 32
   orig: 35, 32
   offset: 0, 0
   index: -1
 grass2
   rotate: false
-  xy: 754, 341
+  xy: 580, 43
   size: 25, 30
   orig: 25, 30
   offset: 0, 0
   index: -1
 grass3
   rotate: false
-  xy: 310, 17
+  xy: 947, 455
   size: 49, 55
   orig: 49, 55
   offset: 0, 0
@@ -195,35 +202,42 @@ ground9
   index: -1
 heart1
   rotate: false
-  xy: 604, 136
+  xy: 497, 37
   size: 40, 36
   orig: 40, 36
   offset: 0, 0
   index: -1
 heart2
   rotate: false
-  xy: 594, 64
+  xy: 762, 371
   size: 37, 34
   orig: 37, 34
   offset: 0, 0
   index: -1
 heart3
   rotate: false
-  xy: 594, 100
+  xy: 539, 39
   size: 39, 34
   orig: 39, 34
   offset: 0, 0
   index: -1
+middle
+  rotate: false
+  xy: 310, 9
+  size: 63, 63
+  orig: 63, 63
+  offset: 0, 0
+  index: -1
 silver
   rotate: false
-  xy: 947, 458
+  xy: 375, 17
   size: 42, 52
   orig: 42, 52
   offset: 0, 0
   index: -1
 treat
   rotate: false
-  xy: 991, 471
+  xy: 756, 249
   size: 31, 39
   orig: 31, 39
   offset: 0, 0

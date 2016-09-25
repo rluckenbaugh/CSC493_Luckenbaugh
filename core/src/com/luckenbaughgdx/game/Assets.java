@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
@@ -28,10 +29,39 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetHeart heart;
 	public AssetMedal medal;
 	public AssetLevelDecoration levelDecoration;
-	
+	public AssetFonts fonts;
 	
 	//singleton: prevent instantiation from other classes
 	private Assets() {}
+	
+	/*
+	 * establish the fonts and thier sizes
+	 */
+	public class AssetFonts 
+	{
+		public final BitmapFont defaultSmall;
+		public final BitmapFont defaultNormal;
+		public final BitmapFont defaultBig;
+		
+		public AssetFonts()
+		{
+			//create three fonts using Libgdx's 15px bitmap font
+			defaultSmall = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
+			defaultNormal = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"), true);
+			defaultBig = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
+			
+			//set font sizes
+			defaultSmall.getData().setScale(0.75f);
+			defaultNormal.getData().setScale(1.0f);
+			defaultBig.getData().setScale(2.0f);
+			
+			//enable linear texturing for smooth fonts
+			defaultSmall.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			defaultBig.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			
+		}
+	}
 	
 	/*
 	 * initialize assets
@@ -61,6 +91,7 @@ public class Assets implements Disposable, AssetErrorListener
 	}
 	
 	//create game resource objects
+	fonts = new AssetFonts();
 	pooch = new AssetPooch(atlas);
 	ground = new AssetGround(atlas);
 	treat = new AssetTreat(atlas);
@@ -98,13 +129,13 @@ public class Assets implements Disposable, AssetErrorListener
 	 */
 	public class AssetGround
 	{
-		public final AtlasRegion shortgrass;
-		public final AtlasRegion longgrass;
+		public final AtlasRegion edge;
+		public final AtlasRegion middle;
 		
 		public AssetGround (TextureAtlas atlas)
 		{
-			shortgrass = atlas.findRegion("ground1");
-			longgrass = atlas.findRegion("ground2");
+			edge = atlas.findRegion("edge");
+			middle = atlas.findRegion("middle");
 		}
 	}
 	
