@@ -246,7 +246,7 @@ public class Assets implements Disposable, AssetErrorListener
 			flower1 = atlas.findRegion("flower1");
 			flower2 = atlas.findRegion("flower2");
 			cloud = atlas.findRegion("cloud");
-			house = atlas.findRegion("house");
+			house = atlas.findRegion("doghouse");
 		}
 		
 	}
