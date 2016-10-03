@@ -14,6 +14,9 @@ public class House extends AbstractGameObject
         init();
     }
 
+    /*
+     * initate the house
+     */
     private void init()
     {
         dimension.set(2.0f, 2.0f);
@@ -25,6 +28,11 @@ public class House extends AbstractGameObject
 
     }
 
+    /*
+     * render the house
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#render(com.badlogic.gdx.graphics.g2d.SpriteBatch)
+     */
     @Override
     public void render(SpriteBatch batch)
     {

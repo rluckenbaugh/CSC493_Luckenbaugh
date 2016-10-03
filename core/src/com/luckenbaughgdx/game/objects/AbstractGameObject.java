@@ -87,6 +87,9 @@ public abstract class AbstractGameObject
         velocity.x = MathUtils.clamp(velocity.x, -terminalVelocity.x, terminalVelocity.x);
     }
 
+    /*
+     * update the motion in the y direction
+     */
     protected void updateMotionY(float deltaTime)
     {
         if (velocity.y != 0)

@@ -7,6 +7,7 @@ import com.luckenbaughgdx.game.Assets;
 public class Bee extends AbstractGameObject
 {
     public TextureRegion regBee;
+    public boolean collected;
     
     public Bee()
     {
@@ -21,17 +22,18 @@ public class Bee extends AbstractGameObject
 
         //Set bounding box for collection detection
         bounds.set(0, 0, dimension.x, dimension.y);
-
+        collected = false;
 
     }
 
     @Override
     public void render(SpriteBatch batch)
     {
-
+        if (collected)
+            return;
         TextureRegion reg = null;
         reg = regBee;
-        batch.draw(reg.getTexture(), position.x, position.y - 4.0f, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
+        batch.draw(reg.getTexture(), position.x, position.y , origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
                 reg.getRegionHeight(), false, false);
     }
 

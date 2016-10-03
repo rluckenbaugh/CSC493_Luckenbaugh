@@ -147,7 +147,7 @@ public class WorldRenderer implements Disposable
         //anchored to top left edge
         renderGuiScore(batch);
         //draw collected feather icon at the top right corner
-        renderGuiFeatherPowerup(batch);
+        renderGuiPilePowerdown(batch);
         //draw extra lives icon and text anchored to top right edge
         renderGuiExtraLive(batch);
         //draw fps text anchored to bottom right edge
@@ -168,6 +168,9 @@ public class WorldRenderer implements Disposable
         batch.dispose();
     }
 
+    /*
+     * render that the game is over
+     */
     private void renderGuiGameOverMessage(SpriteBatch batch)
     {
         float x = cameraGUI.viewportWidth / 2;
@@ -182,7 +185,10 @@ public class WorldRenderer implements Disposable
         }
     }
 
-    private void renderGuiFeatherPowerup (SpriteBatch batch)
+    /*
+     * render the image of the pile powerdown
+     */
+    private void renderGuiPilePowerdown (SpriteBatch batch)
     {
         float x = -15;
         float y = 30;

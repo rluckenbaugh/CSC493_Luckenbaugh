@@ -36,7 +36,7 @@ public class Pooch extends AbstractGameObject
 
     public JUMP_STATE jumpState;
 
-    public boolean hasFeatherPowerup;
+    public boolean hasPilePowerdown;
 
     public float timeLeftPilePowerdown;
 
@@ -45,6 +45,9 @@ public class Pooch extends AbstractGameObject
         init();
     }
 
+    /*
+     * initate the pooch and all its attributes
+     */
     public void init()
     {
         dimension.set(1, 1);
@@ -63,10 +66,13 @@ public class Pooch extends AbstractGameObject
         jumpState = JUMP_STATE.FALLING;
         timeJumping = 0;
         //power ups
-        hasFeatherPowerup = false;
+        hasPilePowerdown = false;
         timeLeftPilePowerdown = 0;
     }
 
+    /*
+     * set the jumping states
+     */
     public void setJumping(boolean jumpKeyPressed)
     {
         switch (jumpState)
@@ -81,14 +87,14 @@ public class Pooch extends AbstractGameObject
         case JUMP_RISING: //rising in the air
             if (!jumpKeyPressed)
                 jumpState = JUMP_STATE.JUMP_FALLING;
-            if (jumpKeyPressed && hasFeatherPowerup)
+            if (jumpKeyPressed && hasPilePowerdown)
             {
                 jumpState = JUMP_STATE.JUMP_FALLING;
             }
             break;
         case FALLING: //falling down
         case JUMP_FALLING: //falling down after jump
-            if (jumpKeyPressed && hasFeatherPowerup)
+            if (jumpKeyPressed && hasPilePowerdown)
             {
               //  timeJumping = JUMP_TIME_OFFSET_FLYING;
                 jumpState = JUMP_STATE.JUMP_FALLING;
@@ -97,18 +103,24 @@ public class Pooch extends AbstractGameObject
         }
     }
 
+    /*
+     * set the pile powerdown
+     */
     public void setPilePowerdown(boolean pickedUp)
     {
-        hasFeatherPowerup = pickedUp;
+        hasPilePowerdown = pickedUp;
         if (pickedUp)
         {
             timeLeftPilePowerdown = Constants.ITEM_PILE_POWERDOWN_DURATION;
         }
     }
 
-    public boolean hasFeatherPowerup()
+    /*
+     * check if it has the pile powerdown
+     */
+    public boolean hasPilePowerdown()
     {
-        return hasFeatherPowerup && timeLeftPilePowerdown > 0;
+        return hasPilePowerdown && timeLeftPilePowerdown > 0;
     }
 
     @Override
@@ -122,8 +134,10 @@ public class Pooch extends AbstractGameObject
         if (timeLeftPilePowerdown > 0)
         {
             timeLeftPilePowerdown -= deltaTime;
+            terminalVelocity.set(2.0f,4.0f);
             if (timeLeftPilePowerdown < 0)
             {
+                terminalVelocity.set(3.0f,4.0f);
                 //disposable powerup
                 timeLeftPilePowerdown = 0;
                 setPilePowerdown(false);
@@ -131,6 +145,11 @@ public class Pooch extends AbstractGameObject
         }
     }
 
+    /*
+     * update the motion in the y direction
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#updateMotionY(float)
+     */
     @Override
     protected void updateMotionY(float deltaTime)
     {
@@ -165,13 +184,18 @@ public class Pooch extends AbstractGameObject
             super.updateMotionY(deltaTime);
     }
 
+    /*
+     * render the pooch
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#render(com.badlogic.gdx.graphics.g2d.SpriteBatch)
+     */
     @Override
     public void render(SpriteBatch batch)
     {
         TextureRegion reg = null;
 
         //set special color when game object has a feather power up
-        if (hasFeatherPowerup)
+        if (hasPilePowerdown)
         {
             batch.setColor(0.0f, 0.87f, 0.8f, 1.0f);
         }

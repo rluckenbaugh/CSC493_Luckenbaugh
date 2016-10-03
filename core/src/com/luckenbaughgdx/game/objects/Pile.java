@@ -17,6 +17,9 @@ public class Pile extends AbstractGameObject
         init();
     }
 
+    /*
+     * initate the image of the pile
+     */
     private void init()
     {
         dimension.set(1.0f, 0.76f);
@@ -28,6 +31,11 @@ public class Pile extends AbstractGameObject
         collected = false;
     }
 
+    /*
+     * render the pile
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#render(com.badlogic.gdx.graphics.g2d.SpriteBatch)
+     */
     @Override
     public void render(SpriteBatch batch)
     {
@@ -39,6 +47,9 @@ public class Pile extends AbstractGameObject
                 reg.getRegionHeight(), false, false);
     }
 
+    /*
+     * return the score
+     */
     public int getScore()
     {
         return -100;

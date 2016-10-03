@@ -34,6 +34,9 @@ public class Level
 
     public Array<Pile> piles;
 
+    /*
+     * set the colors in the level map
+     */
     public enum BLOCK_TYPE
     {
         EMPTY(0,0,0), //black
@@ -69,6 +72,7 @@ public class Level
     //decoration
     public Clouds clouds;
 
+    //decoration
     public Fence fence;
 
     public Level(String filename)
@@ -76,6 +80,9 @@ public class Level
         init(filename);
     }
 
+    /*
+     * initiate the level and all of the images in it
+     */
     private void init(String filename)
     {
         //player character
@@ -151,7 +158,7 @@ public class Level
                 else if (BLOCK_TYPE.ITEM_BEE.sameColor(currentPixel))
                 {
                     obj = new Bee();
-                    offsetHeight = -1.5f;
+                    offsetHeight = -6.5f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     bees.add((Bee) obj);
                 }
@@ -160,11 +167,11 @@ public class Level
                 else if (BLOCK_TYPE.ITEM_PILE.sameColor(currentPixel))
                 {
                     obj = new Pile();
-                    offsetHeight = -2.38f;
+                    offsetHeight = -3.0f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     piles.add((Pile) obj);
                 }
-                //gold coin
+                //treat
                 else if (BLOCK_TYPE.ITEM_TREAT.sameColor(currentPixel))
                 {
                     obj = new Treat();
@@ -211,6 +218,9 @@ public class Level
 
     }
 
+    /*
+     * render the images
+     */
     public void render(SpriteBatch batch)
     {
         //draw mountians
@@ -248,6 +258,9 @@ public class Level
 
     }
 
+    /*
+     * update the images with the time
+     */
     public void update(float deltaTime)
     {
         pooch.update(deltaTime);

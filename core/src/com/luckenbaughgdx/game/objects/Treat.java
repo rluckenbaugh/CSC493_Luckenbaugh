@@ -19,6 +19,9 @@ public class Treat extends AbstractGameObject
         init();
     }
 
+    /*
+     * initate the treat 
+     */
     private void init()
     {
         dimension.set(0.5f, 0.5f);
@@ -32,6 +35,11 @@ public class Treat extends AbstractGameObject
 
     }
 
+    /*
+     * render the image
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#render(com.badlogic.gdx.graphics.g2d.SpriteBatch)
+     */
     @Override
     public void render(SpriteBatch batch)
     {
@@ -44,6 +52,9 @@ public class Treat extends AbstractGameObject
                 reg.getRegionHeight(), false, false);
     }
 
+    /*
+     * get the score from the treat
+     */
     public int getScore()
     {
         return 100;

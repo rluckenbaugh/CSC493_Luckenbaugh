@@ -27,16 +27,25 @@ public class WorldController extends InputAdapter
 
     private float timeLeftGameOverDelay;
 
+    /*
+     * check if the game is over or not
+     */
     public boolean isGameOver()
     {
         return lives < 0;
     }
 
+    /*
+     * check if the player is in the water
+     */
     public boolean isPlayerInWater()
     {
         return level.pooch.position.y < -5;
     }
 
+    /*
+     * when the bunny collides with a rock it should not fall through
+     */
     private void onCollisionBunnyHeadWithRock(Rock rock)
     {
         Pooch pooch = level.pooch;
@@ -66,26 +75,41 @@ public class WorldController extends InputAdapter
         }
     }
 
-    private void onCollisionBunnyWithTreat(Treat goldcoin)
+    /*
+     * when the bunny collides with a treat it should collect it
+     */
+    private void onCollisionBunnyWithTreat(Treat treat)
     {
-        goldcoin.collected = true;
-        score += goldcoin.getScore();
+        treat.collected = true;
+        score += treat.getScore();
         Gdx.app.log(TAG, "Gold coin collected");
     }
 
+    /*
+     * when the bunny collides with a pile it can't jump as high
+     */
     private void onCollisionBunnyWithPile(Pile pile)
     {
+        pile.collected = true;
         score += pile.getScore();
         level.pooch.setPilePowerdown(true);
         Gdx.app.log(TAG, "Pile Hit");
     }
+    
+    /*
+     * when the bunny collides with a bee it should loose points
+     */
     private void onCollisionBunnyWithBee(Bee bee)
     {
+        bee.collected = true;
         score += bee.getScore();
         Gdx.app.log(TAG, "Bee Hit");
         
     }
 
+    /*
+     * test all of the collisions 
+     */
     private void testCollisions()
     {
         r1.set(level.pooch.position.x, level.pooch.position.y, level.pooch.bounds.width, level.pooch.bounds.height);
@@ -99,25 +123,27 @@ public class WorldController extends InputAdapter
             //IMPORTANT: must do all collisions for valid edge testing on rocks
         }
 
-        //Test collsion: bunny head with a gold coin
-        for (Treat goldcoin : level.treats)
+        //Test collsion: pooch with a treat
+        for (Treat treat : level.treats)
         {
-            if (goldcoin.collected)
+            if (treat.collected)
                 continue;
-            r2.set(goldcoin.position.x, goldcoin.position.y, goldcoin.bounds.width, goldcoin.bounds.height);
+            r2.set(treat.position.x, treat.position.y, treat.bounds.width, treat.bounds.height);
 
             if (!(r1.overlaps(r2)))
                 continue;
 
-            onCollisionBunnyWithTreat(goldcoin);
+            onCollisionBunnyWithTreat(treat);
 
             break;
         }
 
-        //Test collsion: bunny head with feathers
+        //Test collsion: pooch with piles
         for (Pile pile : level.piles)
         {
 
+            if (pile.collected)
+                continue;
             r2.set(pile.position.x, pile.position.y, pile.bounds.width, pile.bounds.height);
 
             if (!r1.overlaps(r2))
@@ -126,10 +152,12 @@ public class WorldController extends InputAdapter
             break;
         }
         
-        //Test collsion: bunny head with feathers
+        //Test collsion: pooch with bees
         for (Bee bee : level.bees)
         {
 
+            if (bee.collected)
+                continue;
             r2.set(bee.position.x, bee.position.y, bee.bounds.width, bee.bounds.height);
 
             if (!r1.overlaps(r2))
