@@ -3,7 +3,9 @@ package com.luckenbaughgdx.game.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.luckenbaughgdx.game.Assets;
+import com.luckenbaughgdx.game.util.CharacterSkin;
 import com.luckenbaughgdx.game.util.Constants;
+import com.luckenbaughgdx.game.util.GamePreferences;
 
 /*
  * controls the bunny head and its attributes
@@ -45,6 +47,9 @@ public class BunnyHead extends AbstractGameObject
         init();
     }
 
+    /*
+     * initate the bunny and all its attributes
+     */
     public void init()
     {
         dimension.set(1, 1);
@@ -67,6 +72,9 @@ public class BunnyHead extends AbstractGameObject
         timeLeftFeatherPowerup = 0;
     }
 
+    /*
+     * set the jumping states
+     */
     public void setJumping(boolean jumpKeyPressed)
     {
         switch (jumpState)
@@ -127,6 +135,11 @@ public class BunnyHead extends AbstractGameObject
         }
     }
 
+    /*
+     * update the motion in the y direction
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#updateMotionY(float)
+     */
     @Override
     protected void updateMotionY(float deltaTime)
     {
@@ -161,10 +174,18 @@ public class BunnyHead extends AbstractGameObject
             super.updateMotionY(deltaTime);
     }
 
+    /*
+     * render the pooch
+     * (non-Javadoc)
+     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#render(com.badlogic.gdx.graphics.g2d.SpriteBatch)
+     */
     @Override
     public void render(SpriteBatch batch)
     {
         TextureRegion reg = null;
+
+        //apply skin color
+        batch.setColor(CharacterSkin.values()[GamePreferences.instances.charSkin].getColor());
 
         //set special color when game object has a feather power up
         if (hasFeatherPowerup)

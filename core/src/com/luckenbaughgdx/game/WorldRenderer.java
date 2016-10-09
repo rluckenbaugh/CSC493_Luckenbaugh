@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.luckenbaughgdx.game.util.Constants;
+import com.luckenbaughgdx.game.util.GamePreferences;
 
 /*
  * draw the game scene
@@ -152,7 +153,8 @@ public class WorldRenderer implements Disposable
         //draw extra lives icon and text anchored to top right edge
         renderGuiExtraLive(batch);
         //draw fps text anchored to bottom right edge
-        renderGuiFpsCounter(batch);
+        if (GamePreferences.instances.showFpsCounter)
+        	renderGuiFpsCounter(batch);
         //draw game over text
         renderGuiGameOverMessage(batch);
         batch.end();
@@ -169,6 +171,9 @@ public class WorldRenderer implements Disposable
         batch.dispose();
     }
 
+    /*
+     * render that the game is over
+     */
     private void renderGuiGameOverMessage(SpriteBatch batch)
     {
         float x = cameraGUI.viewportWidth / 2;

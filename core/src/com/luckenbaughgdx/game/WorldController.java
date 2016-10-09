@@ -1,6 +1,7 @@
 package com.luckenbaughgdx.game;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.InputAdapter;
@@ -10,6 +11,7 @@ import com.luckenbaughgdx.game.objects.BunnyHead.JUMP_STATE;
 import com.luckenbaughgdx.game.objects.Feather;
 import com.luckenbaughgdx.game.objects.GoldCoin;
 import com.luckenbaughgdx.game.objects.Rock;
+import com.luckenbaughgdx.game.screens.MenuScreen;
 import com.luckenbaughgdx.game.util.CameraHelper;
 import com.luckenbaughgdx.game.util.Constants;
 
@@ -26,16 +28,71 @@ public class WorldController extends InputAdapter
 
     private float timeLeftGameOverDelay;
 
+    private static final String TAG = WorldController.class.getName();
+
+    public Level level;
+
+    public int lives;
+
+    public int score;
+
+    private Game game;
+
+    public static CameraHelper cameraHelper;
+
+    public WorldController(Game game)
+    {
+        this.game = game;
+        init();
+    }
+
+    /*
+     * initiate the level
+     */
+    private void initLevel()
+    {
+        score = 0;
+        level = new Level(Constants.LEVEL_01);
+        cameraHelper.setTarget(level.bunnyHead);
+    }
+
+    /*
+     * initiate the drawing process
+     */
+    private void init()
+    {
+        Gdx.input.setInputProcessor(this);
+        cameraHelper = new CameraHelper();
+        lives = Constants.LIVES_START - 1;
+        timeLeftGameOverDelay = 0;
+        initLevel();
+    }
+
+    private void backToMenu()
+    {
+        //switch to menu screen
+        game.setScreen(new MenuScreen(game));
+    }
+
+    /*
+     * check if the game is over or not
+     */
     public boolean isGameOver()
     {
         return lives < 0;
     }
 
+    /*
+     * check if the player is in the water
+     */
     public boolean isPlayerInWater()
     {
         return level.bunnyHead.position.y < -5;
     }
 
+    /*
+     * when the bunny collides with a rock it should not fall through
+     */
     private void onCollisionBunnyHeadWithRock(Rock rock)
     {
         BunnyHead bunnyHead = level.bunnyHead;
@@ -122,43 +179,6 @@ public class WorldController extends InputAdapter
         }
     }
 
-    private static final String TAG = WorldController.class.getName();
-
-    public Level level;
-
-    public int lives;
-
-    public int score;
-
-    public static CameraHelper cameraHelper;
-
-    public WorldController()
-    {
-        init();
-    }
-
-    /*
-     * initiate the level
-     */
-    private void initLevel()
-    {
-        score = 0;
-        level = new Level(Constants.LEVEL_01);
-        cameraHelper.setTarget(level.bunnyHead);
-    }
-
-    /*
-     * initiate the drawing process
-     */
-    private void init()
-    {
-        Gdx.input.setInputProcessor(this);
-        cameraHelper = new CameraHelper();
-        lives = Constants.LIVES_START - 1;
-        timeLeftGameOverDelay = 0;
-        initLevel();
-    }
-
     /*
      * update the movement of the scene
      */
@@ -169,7 +189,7 @@ public class WorldController extends InputAdapter
         {
             timeLeftGameOverDelay -= deltaTime;
             if (timeLeftGameOverDelay < 0)
-                init();
+                backToMenu();
         }
         else
         {
@@ -258,6 +278,11 @@ public class WorldController extends InputAdapter
         {
             cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.bunnyHead);
             Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
+        }
+        //Back to Menu
+        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
+        {
+            backToMenu();
         }
         return false;
     }
