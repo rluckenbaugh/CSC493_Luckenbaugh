@@ -22,7 +22,7 @@ public class Pile extends AbstractGameObject
      */
     private void init()
     {
-        dimension.set(1.0f, 0.76f);
+        dimension.set(1.0f, 0.75f);
 
         regPile = Assets.instance.pile.pile;
 

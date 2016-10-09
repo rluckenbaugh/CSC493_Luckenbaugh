@@ -1,11 +1,13 @@
 package com.luckenbaughgdx.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import com.luckenbaughgdx.game.util.Constants;
+import com.luckenbaughgdx.game.util.GamePreferences;
 
 /*
  * draw the game scene
@@ -24,9 +26,9 @@ public class WorldRenderer implements Disposable
     /*
      * initiate the rendering
      */
-    public WorldRenderer(WorldController worldController)
+    public WorldRenderer(WorldController worldController2)
     {
-        this.worldController = worldController;
+        this.worldController = worldController2;
         init();
     }
 
@@ -151,7 +153,8 @@ public class WorldRenderer implements Disposable
         //draw extra lives icon and text anchored to top right edge
         renderGuiExtraLive(batch);
         //draw fps text anchored to bottom right edge
-        renderGuiFpsCounter(batch);
+        if (GamePreferences.instances.showFpsCounter)
+            renderGuiFpsCounter(batch);
         //draw game over text
         renderGuiGameOverMessage(batch);
         batch.end();
@@ -181,31 +184,31 @@ public class WorldRenderer implements Disposable
             BitmapFont fontGameOver = Assets.instance.fonts.defaultBig;
             fontGameOver.setColor(1, 0.75f, 0.25f, 1);
             fontGameOver.draw(batch, "GAME OVER", x, y, 0, 1, false);
-            fontGameOver.setColor(1,1,1,1);
+            fontGameOver.setColor(1, 1, 1, 1);
         }
     }
 
     /*
      * render the image of the pile powerdown
      */
-    private void renderGuiPilePowerdown (SpriteBatch batch)
+    private void renderGuiPilePowerdown(SpriteBatch batch)
     {
         float x = -15;
         float y = 30;
         float timeLeftFeatherPowerup = worldController.level.pooch.timeLeftPilePowerdown;
-        if(timeLeftFeatherPowerup >0)
+        if (timeLeftFeatherPowerup > 0)
         {
             //starticon fade in/out if the power up time is less thann four seconds the fade interval is set to 5 changes per second
-            if(timeLeftFeatherPowerup < 4)
+            if (timeLeftFeatherPowerup < 4)
             {
-                if(((int)(timeLeftFeatherPowerup *5) %2) !=0)
+                if (((int) (timeLeftFeatherPowerup * 5) % 2) != 0)
                 {
-                    batch.setColor(1,1,1,0.5f);
+                    batch.setColor(1, 1, 1, 0.5f);
                 }
             }
             batch.draw(Assets.instance.pile.pile, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
-            batch.setColor(1,1,1,1);
-            Assets.instance.fonts.defaultSmall.draw(batch, "" + (int)timeLeftFeatherPowerup, x + 60, y + 57);
+            batch.setColor(1, 1, 1, 1);
+            Assets.instance.fonts.defaultSmall.draw(batch, "" + (int) timeLeftFeatherPowerup, x + 60, y + 57);
         }
     }
 }

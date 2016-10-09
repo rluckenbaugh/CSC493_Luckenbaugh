@@ -3,7 +3,9 @@ package com.luckenbaughgdx.game.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.luckenbaughgdx.game.Assets;
+import com.luckenbaughgdx.game.util.CharacterSkin;
 import com.luckenbaughgdx.game.util.Constants;
+import com.luckenbaughgdx.game.util.GamePreferences;
 
 /*
  * controls the bunny head and its attributes
@@ -193,6 +195,9 @@ public class Pooch extends AbstractGameObject
     public void render(SpriteBatch batch)
     {
         TextureRegion reg = null;
+        
+        //apply skin color
+        batch.setColor(CharacterSkin.values()[GamePreferences.instances.charSkin].getColor());
 
         //set special color when game object has a feather power up
         if (hasPilePowerdown)

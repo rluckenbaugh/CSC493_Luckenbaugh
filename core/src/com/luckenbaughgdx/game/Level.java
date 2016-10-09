@@ -23,11 +23,11 @@ public class Level
     public static final String TAG = Level.class.getName();
 
     public Pooch pooch;
-    
+
     public House house;
-    
+
     public Bone bone;
-    
+
     public Array<Bee> bees;
 
     public Array<Treat> treats;
@@ -39,13 +39,13 @@ public class Level
      */
     public enum BLOCK_TYPE
     {
-        EMPTY(0,0,0), //black
-        ROCK(0, 255,0), // green
+        EMPTY(0, 0, 0), //black
+        ROCK(0, 255, 0), // green
         PLAYER_SPAWNPOINT(255, 255, 255), //white
-        ITEM_BEE(255,0,0), //red
-        ITEM_TREAT(255,255,0), //yellow;
-        ITEM_PILE(255,0,255), //purple
-        ITEM_HOUSE(0, 255, 255),//teal
+        ITEM_BEE(255, 0, 0), //red
+        ITEM_TREAT(255, 255, 0), //yellow;
+        ITEM_PILE(255, 0, 255), //purple
+        ITEM_HOUSE(0, 255, 255), //teal
         ITEM_BONE(0, 0, 255); //blue 
 
         private int color;
@@ -112,7 +112,6 @@ public class Level
                 //find matching color value to identify block type at (x,y)
                 //point and create the corresponding game object if there ia a match
 
-
                 //empty space
                 if (BLOCK_TYPE.EMPTY.sameColor(currentPixel))
                 {
@@ -125,8 +124,8 @@ public class Level
                     if (lastPixel != currentPixel)
                     {
                         obj = new Rock();
-                        float heightIncreaseFactor = 0.25f;
-                        offsetHeight = -2.5f;
+                        float heightIncreaseFactor = 0.75f;
+                        offsetHeight = -3.25f;
                         obj.position.set(pixelX, baseHeight * obj.dimension.y * heightIncreaseFactor + offsetHeight);
                         rocks.add((Rock) obj);
                     }
@@ -136,7 +135,6 @@ public class Level
                     }
                 }
 
-                
                 //player spawn point
                 else if (BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel))
                 {
@@ -145,12 +143,12 @@ public class Level
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     pooch = (Pooch) obj;
                 }
-                
+
                 //dog house decoration
                 else if (BLOCK_TYPE.ITEM_HOUSE.sameColor(currentPixel))
                 {
                     obj = new House();
-                    offsetHeight = -4.5f;
+                    offsetHeight = -0.5f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     house = (House) obj;
                 }
@@ -162,7 +160,7 @@ public class Level
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     bees.add((Bee) obj);
                 }
-                
+
                 //pile
                 else if (BLOCK_TYPE.ITEM_PILE.sameColor(currentPixel))
                 {
@@ -179,18 +177,16 @@ public class Level
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     treats.add((Treat) obj);
                 }
-                
+
                 //big bone
                 else if (BLOCK_TYPE.ITEM_BONE.sameColor(currentPixel))
                 {
                     obj = new Bone();
-                    offsetHeight = -3.0f;
+                    offsetHeight = -1.25f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     bone = (Bone) obj;
                 }
-                
 
-                
                 //unkown object or pixel
                 else
                 {
@@ -200,8 +196,7 @@ public class Level
                     int a = 0xff & currentPixel; //alpha channel
                     Gdx.app.error(TAG, "Unkown object at x<" + pixelX + "> y<" + pixelY + ">: r<" + r + "> g<" + g + "> b<" + b + "> a<" + a + ">");
                 }
-                
-                
+
                 lastPixel = currentPixel;
             }
         }
@@ -229,32 +224,30 @@ public class Level
         //draw rocks
         for (Rock rock : rocks)
             rock.render(batch);
-
-        //Draw gold Coins
+        
+        //draw clouds
+        clouds.render(batch);
+        
+        //Draw treats
         for (Treat goldCoin : treats)
             goldCoin.render(batch);
 
         //draw piles
         for (Pile pile : piles)
             pile.render(batch);
-        
-        //draw bees
-        for(Bee bee : bees)
-            bee.render(batch);
-        
-        //draw player character
-        pooch.render(batch);
 
-        //draw clouds
-        clouds.render(batch);
-        
+        //draw bees
+        for (Bee bee : bees)
+            bee.render(batch);
+
         //draw house
         house.render(batch);
-        
+
         //draw bone
         bone.render(batch);
-        
 
+        //draw player character
+        pooch.render(batch);
 
     }
 

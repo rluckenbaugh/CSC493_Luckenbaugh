@@ -1,6 +1,7 @@
 package com.luckenbaughgdx.game;
 
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.InputAdapter;
@@ -11,6 +12,7 @@ import com.luckenbaughgdx.game.objects.Pooch;
 import com.luckenbaughgdx.game.objects.Pooch.JUMP_STATE;
 import com.luckenbaughgdx.game.objects.Treat;
 import com.luckenbaughgdx.game.objects.Rock;
+import com.luckenbaughgdx.game.screens.MenuScreen;
 import com.luckenbaughgdx.game.util.CameraHelper;
 import com.luckenbaughgdx.game.util.Constants;
 
@@ -26,6 +28,53 @@ public class WorldController extends InputAdapter
     private Rectangle r2 = new Rectangle();
 
     private float timeLeftGameOverDelay;
+
+    private Game game;
+
+    private static final String TAG = WorldController.class.getName();
+
+    public Level level;
+
+    public int lives;
+
+    public int score;
+
+    public static CameraHelper cameraHelper;
+
+    public WorldController(Game game)
+    {
+        this.game = game;
+        init();
+    }
+
+    
+    /*
+     * initiate the level
+     */
+    private void initLevel()
+    {
+        score = 0;
+        level = new Level(Constants.LEVEL_01);
+        cameraHelper.setTarget(level.pooch);
+    }
+
+    /*
+     * initiate the drawing process
+     */
+    private void init()
+    {
+        Gdx.input.setInputProcessor(this);
+        cameraHelper = new CameraHelper();
+        lives = Constants.LIVES_START - 1;
+        timeLeftGameOverDelay = 0;
+        initLevel();
+    }
+    
+    private void backToMenu()
+    {
+        //switch to menu screen
+        game.setScreen(new MenuScreen(game));
+    }
 
     /*
      * check if the game is over or not
@@ -95,7 +144,7 @@ public class WorldController extends InputAdapter
         level.pooch.setPilePowerdown(true);
         Gdx.app.log(TAG, "Pile Hit");
     }
-    
+
     /*
      * when the bunny collides with a bee it should loose points
      */
@@ -104,7 +153,7 @@ public class WorldController extends InputAdapter
         bee.collected = true;
         score += bee.getScore();
         Gdx.app.log(TAG, "Bee Hit");
-        
+
     }
 
     /*
@@ -151,7 +200,7 @@ public class WorldController extends InputAdapter
             onCollisionBunnyWithPile(pile);
             break;
         }
-        
+
         //Test collsion: pooch with bees
         for (Bee bee : level.bees)
         {
@@ -167,45 +216,6 @@ public class WorldController extends InputAdapter
         }
     }
 
-
-
-    private static final String TAG = WorldController.class.getName();
-
-    public Level level;
-
-    public int lives;
-
-    public int score;
-
-    public static CameraHelper cameraHelper;
-
-    public WorldController()
-    {
-        init();
-    }
-
-    /*
-     * initiate the level
-     */
-    private void initLevel()
-    {
-        score = 0;
-        level = new Level(Constants.LEVEL_01);
-        cameraHelper.setTarget(level.pooch);
-    }
-
-    /*
-     * initiate the drawing process
-     */
-    private void init()
-    {
-        Gdx.input.setInputProcessor(this);
-        cameraHelper = new CameraHelper();
-        lives = Constants.LIVES_START - 1;
-        timeLeftGameOverDelay = 0;
-        initLevel();
-    }
-
     /*
      * update the movement of the scene
      */
@@ -216,7 +226,7 @@ public class WorldController extends InputAdapter
         {
             timeLeftGameOverDelay -= deltaTime;
             if (timeLeftGameOverDelay < 0)
-                init();
+                backToMenu();
         }
         else
         {
@@ -238,43 +248,43 @@ public class WorldController extends InputAdapter
     /*
      * handle keyboard input to control elements of the scene
      */
-    private void handleDebugInput(float deltaTime) 
-	{
+    private void handleDebugInput(float deltaTime)
+    {
         if (Gdx.app.getType() != ApplicationType.Desktop)
             return;
-		
+
         if (!cameraHelper.hasTarget(level.pooch))
         {
-		//Camera Controls (move)
-		float camMoveSpeed = 5 * deltaTime;
-		float camMoveSpeedAccelerationFactor = 5;
-		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
-			camMoveSpeed *= camMoveSpeedAccelerationFactor;
-		if (Gdx.input.isKeyPressed(Keys.LEFT))
-			moveCamera(-camMoveSpeed, 0);
-		if (Gdx.input.isKeyPressed(Keys.RIGHT))
-			moveCamera(camMoveSpeed, 0);
-		if (Gdx.input.isKeyPressed(Keys.UP))
-			moveCamera(0, camMoveSpeed);
-		if (Gdx.input.isKeyPressed(Keys.DOWN))
-			moveCamera(0,-camMoveSpeed);
-		if (Gdx.input.isKeyPressed(Keys.BACKSPACE))
-			cameraHelper.setPosition(0, 0);
+            //Camera Controls (move)
+            float camMoveSpeed = 5 * deltaTime;
+            float camMoveSpeedAccelerationFactor = 5;
+            if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
+                camMoveSpeed *= camMoveSpeedAccelerationFactor;
+            if (Gdx.input.isKeyPressed(Keys.LEFT))
+                moveCamera(-camMoveSpeed, 0);
+            if (Gdx.input.isKeyPressed(Keys.RIGHT))
+                moveCamera(camMoveSpeed, 0);
+            if (Gdx.input.isKeyPressed(Keys.UP))
+                moveCamera(0, camMoveSpeed);
+            if (Gdx.input.isKeyPressed(Keys.DOWN))
+                moveCamera(0, -camMoveSpeed);
+            if (Gdx.input.isKeyPressed(Keys.BACKSPACE))
+                cameraHelper.setPosition(0, 0);
         }
-		
-		//Camera Controls (zoom)
-		float camZoomSpeed = 1 * deltaTime;
-		float camZoomSpeedAcclerationFactor = 5;
-		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
-			camZoomSpeed *= camZoomSpeedAcclerationFactor;
-		if (Gdx.input.isKeyPressed(Keys.COMMA))
-			cameraHelper.addZoom(camZoomSpeed);
-		if (Gdx.input.isKeyPressed(Keys.PERIOD))
-			cameraHelper.addZoom(-camZoomSpeed);
-		if (Gdx.input.isKeyPressed(Keys.SLASH))
-			cameraHelper.setZoom(1);
-        
-	}
+
+        //Camera Controls (zoom)
+        float camZoomSpeed = 1 * deltaTime;
+        float camZoomSpeedAcclerationFactor = 5;
+        if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT))
+            camZoomSpeed *= camZoomSpeedAcclerationFactor;
+        if (Gdx.input.isKeyPressed(Keys.COMMA))
+            cameraHelper.addZoom(camZoomSpeed);
+        if (Gdx.input.isKeyPressed(Keys.PERIOD))
+            cameraHelper.addZoom(-camZoomSpeed);
+        if (Gdx.input.isKeyPressed(Keys.SLASH))
+            cameraHelper.setZoom(1);
+
+    }
 
     /*
      * adjust the camera values
@@ -305,6 +315,11 @@ public class WorldController extends InputAdapter
         {
             cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.pooch);
             Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
+        }
+        //Back to Menu
+        else if ( keycode == Keys.ESCAPE || keycode == Keys.BACK)
+        {
+            backToMenu();
         }
         return false;
     }
