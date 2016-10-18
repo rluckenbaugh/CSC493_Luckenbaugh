@@ -1,5 +1,8 @@
 package com.luckenbaughgdx.game.util;
 
+/*
+ * holds the constants for the game
+ */
 public class Constants
 {
 

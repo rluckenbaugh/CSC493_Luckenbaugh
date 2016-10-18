@@ -1,5 +1,7 @@
 package com.luckenbaughgdx.game.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.luckenbaughgdx.game.Assets;
@@ -19,6 +21,8 @@ public class Pooch extends AbstractGameObject
     private final float JUMP_TIME_MIN = 0.1f;
 
     private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.018f;
+
+    public ParticleEffect dustParticles = new ParticleEffect();
 
     public enum VIEW_DIRECTION
     {
@@ -70,6 +74,10 @@ public class Pooch extends AbstractGameObject
         //power ups
         hasPilePowerdown = false;
         timeLeftPilePowerdown = 0;
+	
+        
+        //Particles
+        dustParticles.load(Gdx.files.internal("effects/CanyonBunnyDust.pfx"), Gdx.files.internal("effects"));
     }
 
     /*
@@ -129,6 +137,7 @@ public class Pooch extends AbstractGameObject
     public void update(float deltaTime)
     {
         super.update(deltaTime);
+        dustParticles.update(deltaTime);
         if (velocity.x != 0)
         {
             viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
@@ -136,6 +145,8 @@ public class Pooch extends AbstractGameObject
         if (timeLeftPilePowerdown > 0)
         {
             timeLeftPilePowerdown -= deltaTime;
+            
+            
             terminalVelocity.set(2.0f,4.0f);
             if (timeLeftPilePowerdown < 0)
             {
@@ -159,6 +170,11 @@ public class Pooch extends AbstractGameObject
         {
         case GROUNDED:
             jumpState = JUMP_STATE.FALLING;
+            if(velocity.x != 0)
+            {
+                dustParticles.setPosition(position.x + dimension.x / 2, position.y);
+                dustParticles.start();
+            }
             break;
         case JUMP_RISING:
             //Keep track of jump time
@@ -183,7 +199,10 @@ public class Pooch extends AbstractGameObject
             }
         }
         if (jumpState != JUMP_STATE.GROUNDED)
+        {
             super.updateMotionY(deltaTime);
+            dustParticles.allowCompletion();
+        }
     }
 
     /*
@@ -196,6 +215,10 @@ public class Pooch extends AbstractGameObject
     {
         TextureRegion reg = null;
         
+        //reset color to white
+        batch.setColor(1, 1, 1, 1);
+        dustParticles.draw(batch);
+
         //apply skin color
         batch.setColor(CharacterSkin.values()[GamePreferences.instances.charSkin].getColor());
 

@@ -41,6 +41,10 @@ public class WorldController extends InputAdapter
 
     public static CameraHelper cameraHelper;
 
+    public float livesVisual;
+
+    float scoreVisual;
+
     public WorldController(Game game)
     {
         this.game = game;
@@ -65,7 +69,8 @@ public class WorldController extends InputAdapter
     {
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
-        lives = Constants.LIVES_START - 1;
+        lives = Constants.LIVES_START-1;
+        livesVisual = lives;
         timeLeftGameOverDelay = 0;
         initLevel();
     }
@@ -243,6 +248,11 @@ public class WorldController extends InputAdapter
             else
                 initLevel();
         }
+        if(livesVisual>lives)
+            livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
+        if(scoreVisual< score)
+            scoreVisual= Math.min(score, scoreVisual + 250 * deltaTime);
+            
     }
 
     /*
