@@ -1,6 +1,8 @@
 package com.luckenbaughgdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
@@ -11,7 +13,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
 import com.luckenbaughgdx.game.util.Constants;
-
+/**
+ * Hold the loaded instances for the game
+ * @author Renae
+ *
+ */
 public class Assets implements Disposable, AssetErrorListener
 {
 
@@ -31,6 +37,10 @@ public class Assets implements Disposable, AssetErrorListener
 	public AssetLevelDecoration levelDecoration;
 	public AssetFonts fonts;
 	
+    public AssetSounds sounds;
+
+    public AssetMusic music;
+
 	//singleton: prevent instantiation from other classes
 	private Assets() {}
 	
@@ -74,7 +84,16 @@ public class Assets implements Disposable, AssetErrorListener
 		//set asset manager error handler
 		assetManager.setErrorListener(this);
 		//load texture atlas
-		assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS,TextureAtlas.class);
+        assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+        //load sounds
+        assetManager.load("sounds/jump.wav",Sound.class);
+        assetManager.load("sounds/jump_with_pile.wav",Sound.class);
+        assetManager.load("sounds/pickup_treat.wav",Sound.class);
+        assetManager.load("sounds/hit_bee.wav",Sound.class);
+        assetManager.load("sounds/hit_pile.wav",Sound.class);
+        assetManager.load("sounds/livelost.wav",Sound.class);
+        //load music
+        assetManager.load("music/keith303_-_brand_new_highscore.mp3",Music.class);
 		//start loafing assets and wait until finished
 		assetManager.finishLoading();
 		Gdx.app.debug(TAG,"# of assets loaded: " + assetManager.getAssetNames().size);
@@ -101,6 +120,8 @@ public class Assets implements Disposable, AssetErrorListener
 	heart = new AssetHeart(atlas);
 	medal = new AssetMedal(atlas);
 	levelDecoration = new AssetLevelDecoration(atlas);
+        sounds = new AssetSounds(assetManager);
+        music = new AssetMusic(assetManager);
 	
 	}
 	
@@ -255,6 +276,9 @@ public class Assets implements Disposable, AssetErrorListener
 	public void dispose ()
 	{
 		assetManager.dispose();
+        fonts.defaultSmall.dispose();
+        fonts.defaultNormal.dispose();
+        fonts.defaultBig.dispose();
 		
 	}
 	
@@ -271,10 +295,49 @@ public class Assets implements Disposable, AssetErrorListener
 		
 	}
 	
+    /**
+     * Hold the loaded instances of Sounds
+     * @author Renae
+     *
+     */
+    public class AssetSounds
+    {
+        public final Sound jump;
 
+        public final Sound jumpWithPile;
 
+        public final Sound pickupTreat;
 
+        public final Sound hitPile;
+        
+        public final Sound hitBee;
 
+        public final Sound liveLost;
 	
+        public AssetSounds(AssetManager am)
+        {
+            jump = am.get("sounds/jump.wav", Sound.class);
+            jumpWithPile = am.get("sounds/jump_with_pile.wav", Sound.class);
+            pickupTreat = am.get("sounds/pickup_treat.wav", Sound.class);
+            hitPile = am.get("sounds/hit_pile.wav", Sound.class);
+            liveLost = am.get("sounds/livelost.wav", Sound.class);
+            hitBee = am.get("sounds/hit_bee.wav",Sound.class);
+        }
+
+    }
+    
+    /**
+     * Hold the loaded instances of Music
+     * @author Renae
+     *
+     */
+    public class AssetMusic
+    {
+        public final Music song01;
+        public AssetMusic (AssetManager am)
+        {
+            song01 = am.get("music/keith303_-_brand_new_highscore.mp3", Music.class);
+        }
+    }
 	
 }

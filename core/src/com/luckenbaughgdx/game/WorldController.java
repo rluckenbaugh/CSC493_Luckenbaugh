@@ -13,6 +13,7 @@ import com.luckenbaughgdx.game.objects.Pooch.JUMP_STATE;
 import com.luckenbaughgdx.game.objects.Treat;
 import com.luckenbaughgdx.game.objects.Rock;
 import com.luckenbaughgdx.game.screens.MenuScreen;
+import com.luckenbaughgdx.game.util.AudioManager;
 import com.luckenbaughgdx.game.util.CameraHelper;
 import com.luckenbaughgdx.game.util.Constants;
 
@@ -51,7 +52,6 @@ public class WorldController extends InputAdapter
         init();
     }
 
-    
     /*
      * initiate the level
      */
@@ -69,12 +69,12 @@ public class WorldController extends InputAdapter
     {
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
-        lives = Constants.LIVES_START-1;
+        lives = Constants.LIVES_START - 1;
         livesVisual = lives;
         timeLeftGameOverDelay = 0;
         initLevel();
     }
-    
+
     private void backToMenu()
     {
         //switch to menu screen
@@ -135,6 +135,7 @@ public class WorldController extends InputAdapter
     private void onCollisionBunnyWithTreat(Treat treat)
     {
         treat.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.pickupTreat);
         score += treat.getScore();
         Gdx.app.log(TAG, "Gold coin collected");
     }
@@ -145,9 +146,13 @@ public class WorldController extends InputAdapter
     private void onCollisionBunnyWithPile(Pile pile)
     {
         pile.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.hitPile);
         score += pile.getScore();
         level.pooch.setPilePowerdown(true);
         Gdx.app.log(TAG, "Pile Hit");
+
+
+
     }
 
     /*
@@ -156,6 +161,7 @@ public class WorldController extends InputAdapter
     private void onCollisionBunnyWithBee(Bee bee)
     {
         bee.collected = true;
+        AudioManager.instance.play(Assets.instance.sounds.hitBee);
         score += bee.getScore();
         Gdx.app.log(TAG, "Bee Hit");
 
@@ -242,17 +248,18 @@ public class WorldController extends InputAdapter
         cameraHelper.update(deltaTime);
         if (!isGameOver() && isPlayerInWater())
         {
+            AudioManager.instance.play(Assets.instance.sounds.liveLost);
             lives--;
             if (isGameOver())
                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
             else
                 initLevel();
         }
-        if(livesVisual>lives)
+        if (livesVisual > lives)
             livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
-        if(scoreVisual< score)
-            scoreVisual= Math.min(score, scoreVisual + 250 * deltaTime);
-            
+        if (scoreVisual < score)
+            scoreVisual = Math.min(score, scoreVisual + 250 * deltaTime);
+
     }
 
     /*
@@ -327,7 +334,7 @@ public class WorldController extends InputAdapter
             Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
         }
         //Back to Menu
-        else if ( keycode == Keys.ESCAPE || keycode == Keys.BACK)
+        else if (keycode == Keys.ESCAPE || keycode == Keys.BACK)
         {
             backToMenu();
         }

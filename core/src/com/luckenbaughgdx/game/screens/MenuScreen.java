@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.luckenbaughgdx.game.Assets;
+import com.luckenbaughgdx.game.util.AudioManager;
 import com.luckenbaughgdx.game.util.CharacterSkin;
 import com.luckenbaughgdx.game.util.Constants;
 import com.luckenbaughgdx.game.util.GamePreferences;
@@ -118,6 +119,7 @@ public class MenuScreen extends AbstractGameScreen
     {
         saveSettings();
         onCancelClicked();
+        AudioManager.instance.onSettingsUpdated();
     }
 
     private void onCancelClicked()
@@ -125,6 +127,7 @@ public class MenuScreen extends AbstractGameScreen
         btnMenuPlay.setVisible(true);
         btnMenuOptions.setVisible(true);
         winOptions.setVisible(false);
+        AudioManager.instance.onSettingsUpdated();
     }
 
     private void rebuildStage()
