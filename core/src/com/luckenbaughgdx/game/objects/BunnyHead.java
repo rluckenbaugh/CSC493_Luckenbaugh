@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.luckenbaughgdx.game.Assets;
+import com.luckenbaughgdx.game.util.AudioManager;
 import com.luckenbaughgdx.game.util.CharacterSkin;
 import com.luckenbaughgdx.game.util.Constants;
 import com.luckenbaughgdx.game.util.GamePreferences;
@@ -88,6 +90,7 @@ public class BunnyHead extends AbstractGameObject
         case GROUNDED: //Character is standing on a platform
             if (jumpKeyPressed)
             {
+                AudioManager.instance.play(Assets.instance.sounds.jump);
                 timeJumping = 0;
                 jumpState = JUMP_STATE.JUMP_RISING;
             }
@@ -100,6 +103,7 @@ public class BunnyHead extends AbstractGameObject
         case JUMP_FALLING: //falling down after jump
             if (jumpKeyPressed && hasFeatherPowerup)
             {
+                AudioManager.instance.play(Assets.instance.sounds.jumpWithFeather,1,MathUtils.random(1.0f,1.1f));
                 timeJumping = JUMP_TIME_OFFSET_FLYING;
                 jumpState = JUMP_STATE.JUMP_RISING;
             }
