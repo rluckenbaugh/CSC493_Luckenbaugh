@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.luckenbaughgdx.game.objects.AbstractGameObject;
 import com.luckenbaughgdx.game.objects.BunnyHead;
+import com.luckenbaughgdx.game.objects.Carrot;
 import com.luckenbaughgdx.game.objects.Clouds;
 import com.luckenbaughgdx.game.objects.Feather;
+import com.luckenbaughgdx.game.objects.Goal;
 import com.luckenbaughgdx.game.objects.GoldCoin;
 import com.luckenbaughgdx.game.objects.Mountains;
 import com.luckenbaughgdx.game.objects.Rock;
@@ -26,13 +28,18 @@ public class Level
 
     public Array<Feather> feathers;
 
+    public Array<Carrot> carrots;
+
+    public Goal goal;
+
     public enum BLOCK_TYPE
     {
         EMPTY(0, 0, 0), //black
         ROCK(0, 255, 0), // green
         PLAYER_SPAWNPOINT(255, 255, 255), //white
         ITEM_FEATHER(255, 0, 255), //purple
-        ITEM_GOLD_COIN(255, 255, 0); //yellow;
+        ITEM_GOLD_COIN(255, 255, 0), //yellow;
+        GOAL(255, 0, 0);//red
 
         private int color;
 
@@ -75,6 +82,7 @@ public class Level
         rocks = new Array<Rock>();
         goldcoins = new Array<GoldCoin>();
         feathers = new Array<Feather>();
+        carrots = new Array<Carrot>();
 
         //load image file that represents the data
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -138,6 +146,14 @@ public class Level
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     goldcoins.add((GoldCoin) obj);
                 }
+                //goal
+                else if (BLOCK_TYPE.GOAL.sameColor(currentPixel))
+                {
+                    obj = new Goal();
+                    offsetHeight = -5.0f;
+                    obj.position.set(pixelX, baseHeight + offsetHeight);
+                    goal = (Goal) obj;
+                }
                 //unkown object or pixel
                 else
                 {
@@ -169,6 +185,9 @@ public class Level
     {
         //draw mountians
         mountains.render(batch);
+        
+        //draw goal
+        goal.render(batch);
 
         //draw rocks
         for (Rock rock : rocks)
@@ -181,6 +200,10 @@ public class Level
         //draw feathers
         for (Feather feather : feathers)
             feather.render(batch);
+        
+        //draw carrots
+        for (Carrot carrot : carrots)
+            carrot.render(batch);
 
         //draw player character
         bunnyHead.render(batch);
@@ -202,6 +225,8 @@ public class Level
             goldCoin.update(deltaTime);
         for (Feather feather : feathers)
             feather.update(deltaTime);
+        for (Carrot carrot : carrots)
+            carrot.update(deltaTime);
         clouds.update(deltaTime);
     }
 }
