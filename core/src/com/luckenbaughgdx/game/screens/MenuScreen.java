@@ -286,7 +286,7 @@ public class MenuScreen extends AbstractGameScreen
         }
         stage.act(deltaTime);
         stage.draw();
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
     }
 
     private Table buildOptWinAudioSettings()
@@ -330,6 +330,7 @@ public class MenuScreen extends AbstractGameScreen
         selCharSkin.addListener(new ChangeListener()
         {
 
+            @SuppressWarnings("unchecked")
             @Override
             public void changed(ChangeEvent event, Actor actor)
             {

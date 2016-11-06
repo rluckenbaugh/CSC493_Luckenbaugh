@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 
 /*
  * abstract method of the game objects
@@ -34,6 +35,8 @@ public abstract class AbstractGameObject
 
     public Rectangle bounds;
 
+    public Body body;
+
     /*
      * overall attributes of all game objects
      */
@@ -54,11 +57,19 @@ public abstract class AbstractGameObject
     //each object will be updated with its motion
     public void update(float deltaTime)
     {
-        updateMotionX(deltaTime);
-        updateMotionY(deltaTime);
-        //Move to new position
-        position.x += velocity.x * deltaTime;
-        position.y += velocity.y * deltaTime;
+        if (body == null)
+        {
+            updateMotionX(deltaTime);
+            updateMotionY(deltaTime);
+            //Move to new position
+            position.x += velocity.x * deltaTime;
+            position.y += velocity.y * deltaTime;
+        }
+        else
+        {
+            position.set(body.getPosition());
+            rotation = body.getAngle() * MathUtils.radiansToDegrees;
+        }
     }
 
     //each object will be rendered

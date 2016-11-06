@@ -32,6 +32,8 @@ public class Level
 
     public Array<Treat> treats;
 
+    public Array<Treat> treats2;
+
     public Array<Pile> piles;
 
     /*
@@ -92,6 +94,7 @@ public class Level
         //objects
         rocks = new Array<Rock>();
         treats = new Array<Treat>();
+        treats2 = new Array<Treat>();
         piles = new Array<Pile>();
         bees = new Array<Bee>();
 
@@ -224,10 +227,10 @@ public class Level
         //draw rocks
         for (Rock rock : rocks)
             rock.render(batch);
-        
+
         //draw clouds
         clouds.render(batch);
-        
+
         //Draw treats
         for (Treat goldCoin : treats)
             goldCoin.render(batch);
@@ -249,6 +252,10 @@ public class Level
         //draw player character
         pooch.render(batch);
 
+        //draw carrots
+        for (Treat treat : treats2)
+            treat.render(batch);
+
     }
 
     /*
@@ -264,6 +271,8 @@ public class Level
             treat.update(deltaTime);
         for (Pile feather : piles)
             feather.update(deltaTime);
+        for (Treat carrot : treats2)
+            carrot.update(deltaTime);
         for (Bee bee : bees)
             bee.update(deltaTime);
         clouds.update(deltaTime);

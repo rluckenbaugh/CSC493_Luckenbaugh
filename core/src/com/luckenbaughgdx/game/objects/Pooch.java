@@ -36,7 +36,7 @@ public class Pooch extends AbstractGameObject
         GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING
     }
 
-    private TextureRegion regPooch;
+    // private TextureRegion regPooch;
 
     public VIEW_DIRECTION viewDirection;
 
@@ -47,6 +47,8 @@ public class Pooch extends AbstractGameObject
     public boolean hasPilePowerdown;
 
     public float timeLeftPilePowerdown;
+
+    TextureRegion regPooch;
 
     public Pooch()
     {
@@ -59,8 +61,10 @@ public class Pooch extends AbstractGameObject
     public void init()
     {
         dimension.set(1, 1);
+
         regPooch = Assets.instance.pooch.stand;
         //center image on game object
+
         origin.set(dimension.x / 2, dimension.y / 2);
         //bounding box for collision detection
         bounds.set(0, 0, dimension.x, dimension.y);
@@ -76,8 +80,7 @@ public class Pooch extends AbstractGameObject
         //power ups
         hasPilePowerdown = false;
         timeLeftPilePowerdown = 0;
-	
-        
+
         //Particles
         dustParticles.load(Gdx.files.internal("effects/CanyonBunnyDust.pfx"), Gdx.files.internal("effects"));
     }
@@ -96,6 +99,16 @@ public class Pooch extends AbstractGameObject
                 timeJumping = 0;
                 jumpState = JUMP_STATE.JUMP_RISING;
             }
+            else if (velocity.x != 0)
+            {
+                //Gdx.app.log(TAG, "starting particles");
+                dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
+                dustParticles.start();
+            }
+            else if (velocity.x == 0)
+            {
+                dustParticles.allowCompletion();
+            }
             break;
         case JUMP_RISING: //rising in the air
             if (!jumpKeyPressed)
@@ -109,11 +122,9 @@ public class Pooch extends AbstractGameObject
         case JUMP_FALLING: //falling down after jump
             if (jumpKeyPressed && hasPilePowerdown)
             {
-                AudioManager.instance.play(Assets.instance.sounds.jumpWithPile ,1,MathUtils.random(1.0f,1.1f));
-            
-            
-            
-              //  timeJumping = JUMP_TIME_OFFSET_FLYING;
+                AudioManager.instance.play(Assets.instance.sounds.jumpWithPile, 1, MathUtils.random(1.0f, 1.1f));
+
+                //  timeJumping = JUMP_TIME_OFFSET_FLYING;
                 jumpState = JUMP_STATE.JUMP_FALLING;
             }
             break;
@@ -144,6 +155,20 @@ public class Pooch extends AbstractGameObject
     public void update(float deltaTime)
     {
         super.update(deltaTime);
+
+        updateMotionX(deltaTime);
+        updateMotionY(deltaTime);
+
+		if (body != null)
+		{
+			// Gdx.app.log(TAG, "velY: "+velocity.y+" state: "+jumpState);
+			body.setLinearVelocity(velocity);
+			position.set(body.getPosition());
+		}
+		
+		
+		
+		
         dustParticles.update(deltaTime);
         if (velocity.x != 0)
         {
@@ -152,12 +177,11 @@ public class Pooch extends AbstractGameObject
         if (timeLeftPilePowerdown > 0)
         {
             timeLeftPilePowerdown -= deltaTime;
-            
-            
-            terminalVelocity.set(2.0f,4.0f);
+
+            terminalVelocity.set(2.0f, 4.0f);
             if (timeLeftPilePowerdown < 0)
             {
-                terminalVelocity.set(3.0f,4.0f);
+                terminalVelocity.set(3.0f, 4.0f);
                 //disposable powerup
                 timeLeftPilePowerdown = 0;
                 setPilePowerdown(false);
@@ -177,7 +201,7 @@ public class Pooch extends AbstractGameObject
         {
         case GROUNDED:
             jumpState = JUMP_STATE.FALLING;
-            if(velocity.x != 0)
+            if (velocity.x != 0)
             {
                 dustParticles.setPosition(position.x + dimension.x / 2, position.y);
                 dustParticles.start();
@@ -221,7 +245,7 @@ public class Pooch extends AbstractGameObject
     public void render(SpriteBatch batch)
     {
         TextureRegion reg = null;
-        
+
         //reset color to white
         batch.setColor(1, 1, 1, 1);
         dustParticles.draw(batch);
