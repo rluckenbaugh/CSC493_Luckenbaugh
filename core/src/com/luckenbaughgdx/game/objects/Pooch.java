@@ -1,6 +1,7 @@
 package com.luckenbaughgdx.game.objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -90,45 +91,52 @@ public class Pooch extends AbstractGameObject
      */
     public void setJumping(boolean jumpKeyPressed)
     {
-        switch (jumpState)
-        {
-        case GROUNDED: //Character is standing on a platform
-            if (jumpKeyPressed)
-            {
-                AudioManager.instance.play(Assets.instance.sounds.jump);
-                timeJumping = 0;
-                jumpState = JUMP_STATE.JUMP_RISING;
-            }
-            else if (velocity.x != 0)
-            {
-                //Gdx.app.log(TAG, "starting particles");
-                dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
-                dustParticles.start();
-            }
-            else if (velocity.x == 0)
-            {
-                dustParticles.allowCompletion();
-            }
-            break;
-        case JUMP_RISING: //rising in the air
-            if (!jumpKeyPressed)
-                jumpState = JUMP_STATE.JUMP_FALLING;
-            if (jumpKeyPressed && hasPilePowerdown)
-            {
-                jumpState = JUMP_STATE.JUMP_FALLING;
-            }
-            break;
-        case FALLING: //falling down
-        case JUMP_FALLING: //falling down after jump
-            if (jumpKeyPressed && hasPilePowerdown)
-            {
-                AudioManager.instance.play(Assets.instance.sounds.jumpWithPile, 1, MathUtils.random(1.0f, 1.1f));
 
-                //  timeJumping = JUMP_TIME_OFFSET_FLYING;
-                jumpState = JUMP_STATE.JUMP_FALLING;
-            }
-            break;
+        if (jumpKeyPressed)
+        {
+            velocity.y = terminalVelocity.y;
+            body.setLinearVelocity(velocity);
+            position.set(body.getPosition());
         }
+        /* switch (jumpState)
+         {
+         case GROUNDED: //Character is standing on a platform
+             if (jumpKeyPressed)
+             {
+                 AudioManager.instance.play(Assets.instance.sounds.jump);
+                 timeJumping = 0;
+                 jumpState = JUMP_STATE.JUMP_RISING;
+             }
+             else if (velocity.x != 0)
+             {
+                 //Gdx.app.log(TAG, "starting particles");
+                 dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
+                 dustParticles.start();
+             }
+             else if (velocity.x == 0)
+             {
+                 dustParticles.allowCompletion();
+             }
+             break;
+         case JUMP_RISING: //rising in the air
+             if (!jumpKeyPressed)
+                 jumpState = JUMP_STATE.JUMP_FALLING;
+             if (jumpKeyPressed && hasPilePowerdown)
+             {
+                 jumpState = JUMP_STATE.JUMP_FALLING;
+             }
+             break;
+         case FALLING: //falling down
+         case JUMP_FALLING: //falling down after jump
+             if (jumpKeyPressed && hasPilePowerdown)
+             {
+                 AudioManager.instance.play(Assets.instance.sounds.jumpWithPile, 1, MathUtils.random(1.0f, 1.1f));
+
+                 //  timeJumping = JUMP_TIME_OFFSET_FLYING;
+                 jumpState = JUMP_STATE.JUMP_FALLING;
+             }
+             break;
+         }*/
     }
 
     /*
@@ -159,16 +167,13 @@ public class Pooch extends AbstractGameObject
         updateMotionX(deltaTime);
         updateMotionY(deltaTime);
 
-		if (body != null)
-		{
-			// Gdx.app.log(TAG, "velY: "+velocity.y+" state: "+jumpState);
-			body.setLinearVelocity(velocity);
-			position.set(body.getPosition());
-		}
-		
-		
-		
-		
+        if (body != null)
+        {
+            // Gdx.app.log(TAG, "velY: "+velocity.y+" state: "+jumpState);
+            body.setLinearVelocity(velocity);
+            position.set(body.getPosition());
+        }
+
         dustParticles.update(deltaTime);
         if (velocity.x != 0)
         {

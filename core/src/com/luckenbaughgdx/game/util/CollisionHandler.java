@@ -1,6 +1,7 @@
 package com.luckenbaughgdx.game.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -11,6 +12,7 @@ import com.luckenbaughgdx.game.Assets;
 import com.luckenbaughgdx.game.WorldController;
 import com.luckenbaughgdx.game.objects.AbstractGameObject;
 import com.luckenbaughgdx.game.objects.Bee;
+import com.luckenbaughgdx.game.objects.Bone;
 import com.luckenbaughgdx.game.objects.Pile;
 import com.luckenbaughgdx.game.objects.Pooch;
 import com.luckenbaughgdx.game.objects.Pooch.JUMP_STATE;
@@ -51,25 +53,7 @@ public class CollisionHandler implements ContactListener
             listener.beginContact(contact);
         }
     }
-
-    @Override
-    public void endContact(Contact contact)
-    {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-
-       // Gdx.app.log("CollisionHandler-end A", "end");
-        processContact(contact);
-
-        // Gdx.app.log("CollisionHandler-end A", fixtureA.getBody().getLinearVelocity().x+" : "+fixtureA.getBody().getLinearVelocity().y);
-        // Gdx.app.log("CollisionHandler-end B", fixtureB.getBody().getLinearVelocity().x+" : "+fixtureB.getBody().getLinearVelocity().y);
-        ContactListener listener = getListener(fixtureA.getFilterData().categoryBits, fixtureB.getFilterData().categoryBits);
-        if (listener != null)
-        {
-            listener.endContact(contact);
-        }
-    }
-
+    
     @Override
     public void preSolve(Contact contact, Manifold oldManifold)
     {
@@ -93,6 +77,26 @@ public class CollisionHandler implements ContactListener
             listener.postSolve(contact, impulse);
         }
     }
+    
+    @Override
+    public void endContact(Contact contact)
+    {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+
+       // Gdx.app.log("CollisionHandler-end A", "end");
+        processContact(contact);
+
+        // Gdx.app.log("CollisionHandler-end A", fixtureA.getBody().getLinearVelocity().x+" : "+fixtureA.getBody().getLinearVelocity().y);
+        // Gdx.app.log("CollisionHandler-end B", fixtureB.getBody().getLinearVelocity().x+" : "+fixtureB.getBody().getLinearVelocity().y);
+        ContactListener listener = getListener(fixtureA.getFilterData().categoryBits, fixtureB.getFilterData().categoryBits);
+        if (listener != null)
+        {
+            listener.endContact(contact);
+        }
+    }
+
+    
 
     private void addListenerInternal(short categoryA, short categoryB, ContactListener listener)
     {
@@ -137,9 +141,9 @@ public class CollisionHandler implements ContactListener
     	if (objFixture.getBody().getUserData() instanceof Rock)
     	{
     		Pooch player = (Pooch)playerFixture.getBody().getUserData();
-    	    player.acceleration.y = 0;
+    	    player.acceleration.y = -9.81f;
     	    player.velocity.y = 0;
-    	    player.jumpState = JUMP_STATE.GROUNDED;
+    	    //player.jumpState = JUMP_STATE.GROUNDED;
     	    playerFixture.getBody().setLinearVelocity(player.velocity);
     	}
     	else if (objFixture.getBody().getUserData() instanceof Treat)
@@ -166,6 +170,14 @@ public class CollisionHandler implements ContactListener
             world.score += pile.getScore();
             world.level.pooch.setPilePowerdown(true);          
             world.flagForRemoval(pile);
+        }
+        else if (objFixture.getBody().getUserData() instanceof Bone)
+        {
+            world.goalReached = true;
+            world.timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
+            Vector2 centerPosBunnyHead = new Vector2(world.level.pooch.position);
+            centerPosBunnyHead.x += world.level.pooch.bounds.width;
+            world.spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
         }
     }
 

@@ -18,6 +18,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.luckenbaughgdx.game.objects.AbstractGameObject;
 import com.luckenbaughgdx.game.objects.Bee;
+import com.luckenbaughgdx.game.objects.Bone;
 import com.luckenbaughgdx.game.objects.Clouds;
 import com.luckenbaughgdx.game.objects.House;
 import com.luckenbaughgdx.game.objects.Pile;
@@ -42,7 +43,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     private Rectangle r2 = new Rectangle();
 
-    private float timeLeftGameOverDelay;
+    public float timeLeftGameOverDelay;
 
     private Game game;
 
@@ -62,7 +63,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     float scoreVisual;
 
-    private boolean goalReached;
+    public boolean goalReached;
 
     // Box2D Collisions
     public World b2World;
@@ -103,96 +104,121 @@ public class WorldController extends InputAdapter implements Disposable
         //initiate physics for each object??
         for (Rock rock : level.rocks)
         {
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.type = BodyType.KinematicBody;
-            bodyDef.position.set(rock.position);
-            Body body = b2World.createBody(bodyDef);
-            rock.body = body;
-            PolygonShape polygonShape = new PolygonShape();
+            BodyDef rockbodyDef = new BodyDef();
+            rockbodyDef.type = BodyType.KinematicBody;
+            rockbodyDef.position.set(rock.position);
+            Body rockbody = b2World.createBody(rockbodyDef);
+            rockbody.setUserData(rock);
+            rock.body = rockbody;
+            PolygonShape rockpolygonShape = new PolygonShape();
             origin.x = rock.bounds.width / 2.0f;
             origin.y = rock.bounds.height / 2.0f;
-            polygonShape.setAsBox(rock.bounds.width / 2.0f, rock.bounds.height / 2.0f, origin, 0);
-            FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = polygonShape;
-            body.createFixture(fixtureDef);
-            polygonShape.dispose();
+            rockpolygonShape.setAsBox(rock.bounds.width / 2.0f, rock.bounds.height / 2.0f, origin, 0);
+            FixtureDef rockfixtureDef = new FixtureDef();
+            rockfixtureDef.shape = rockpolygonShape;
+            rockbody.createFixture(rockfixtureDef);
+            rockpolygonShape.dispose();
         }
 
         // For PLayer
         Pooch pooch = level.pooch;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(pooch.position);
-        bodyDef.fixedRotation = true;
+        BodyDef poochbodyDef = new BodyDef();
+        poochbodyDef.position.set(pooch.position);
+        poochbodyDef.fixedRotation = true;
 
-        Body body = b2World.createBody(bodyDef);
-        body.setType(BodyType.DynamicBody);
-        body.setGravityScale(0.0f);
-        body.setUserData(pooch);
-        pooch.body = body;
+        Body poochBody = b2World.createBody(poochbodyDef);
+        poochBody.setType(BodyType.DynamicBody);
+        poochBody.setGravityScale(0.5f);
+        poochBody.setUserData(pooch);
+        pooch.body = poochBody;
 
-        PolygonShape polygonShape = new PolygonShape();
+        PolygonShape poochpolygonShape = new PolygonShape();
         origin.x = (pooch.bounds.width) / 2.0f;
         origin.y = (pooch.bounds.height) / 2.0f;
-        polygonShape.setAsBox((pooch.bounds.width - 0.7f) / 2.0f, (pooch.bounds.height - 0.15f) / 2.0f, origin, 0);
+        poochpolygonShape.setAsBox((pooch.bounds.width - 0.7f) / 2.0f, (pooch.bounds.height - 0.15f) / 2.0f, origin, 0);
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape;
+        FixtureDef poochfixtureDef = new FixtureDef();
+        poochfixtureDef.shape = poochpolygonShape;
         // fixtureDef.friction = 0.5f;
-        body.createFixture(fixtureDef);
-        polygonShape.dispose();
+        poochBody.createFixture(poochfixtureDef);
+        poochpolygonShape.dispose();
         
-        
+        // For bone
+        Bone bone = level.bone;
+        BodyDef bonebodyDef = new BodyDef();
+        bonebodyDef.position.set(bone.position);
+        bonebodyDef.fixedRotation = true;
+
+        Body boneBody = b2World.createBody(bonebodyDef);
+        boneBody.setType(BodyType.KinematicBody);
+        boneBody.setGravityScale(0.5f);
+        boneBody.setUserData(bone);
+        bone.body = boneBody;
+
+        PolygonShape bonepolygonShape = new PolygonShape();
+        origin.x = (bone.bounds.width) / 2.0f;
+        origin.y = (bone.bounds.height) / 2.0f;
+        bonepolygonShape.setAsBox((bone.bounds.width - 0.7f) / 2.0f, (bone.bounds.height - 0.15f) / 2.0f, origin, 0);
+
+        FixtureDef bonefixtureDef = new FixtureDef();
+        bonefixtureDef.shape = bonepolygonShape;
+        // fixtureDef.friction = 0.5f;
+        boneBody.createFixture(bonefixtureDef);
+        bonepolygonShape.dispose();
+
         for (Treat treat : level.treats)
         {
-            BodyDef bodyDef2 = new BodyDef();
-            bodyDef2.type = BodyType.KinematicBody;
-            bodyDef2.position.set(treat.position);
-            Body body1 = b2World.createBody(bodyDef2);
-            treat.body = body1;
-            PolygonShape polygonShape1 = new PolygonShape();
+            BodyDef treatBodyDef = new BodyDef();
+            treatBodyDef.type = BodyType.KinematicBody;
+            treatBodyDef.position.set(treat.position);
+            Body treatBody = b2World.createBody(treatBodyDef);
+            treatBody.setUserData(treat);
+            treat.body = treatBody;
+            PolygonShape treatpolygonShape = new PolygonShape();
             origin.x = treat.bounds.width / 2.0f;
             origin.y = treat.bounds.height / 2.0f;
-            polygonShape1.setAsBox(treat.bounds.width / 2.0f, treat.bounds.height / 2.0f, origin, 0);
-            FixtureDef fixtureDef1 = new FixtureDef();
-            fixtureDef1.shape = polygonShape1;
-            body1.createFixture(fixtureDef1);
-            polygonShape1.dispose();
+            treatpolygonShape.setAsBox(treat.bounds.width / 2.0f, treat.bounds.height / 2.0f, origin, 0);
+            FixtureDef treatfixtureDef = new FixtureDef();
+            treatfixtureDef.shape = treatpolygonShape;
+            treatBody.createFixture(treatfixtureDef);
+            treatpolygonShape.dispose();
         }
-        
+
         for (Bee bee : level.bees)
         {
-            BodyDef bodyDef3 = new BodyDef();
-            bodyDef3.type = BodyType.KinematicBody;
-            bodyDef3.position.set(bee.position);
-            Body body2 = b2World.createBody(bodyDef3);
-            bee.body = body2;
-            PolygonShape polygonShape2 = new PolygonShape();
+            BodyDef beeBodyDef = new BodyDef();
+            beeBodyDef.type = BodyType.KinematicBody;
+            beeBodyDef.position.set(bee.position);
+            Body beeBody = b2World.createBody(beeBodyDef);
+            beeBody.setUserData(bee);
+            bee.body = beeBody;
+            PolygonShape beepolygonShape = new PolygonShape();
             origin.x = bee.bounds.width / 2.0f;
             origin.y = bee.bounds.height / 2.0f;
-            polygonShape2.setAsBox(bee.bounds.width / 2.0f, bee.bounds.height / 2.0f, origin, 0);
-            FixtureDef fixtureDef2 = new FixtureDef();
-            fixtureDef2.shape = polygonShape2;
-            body2.createFixture(fixtureDef2);
-            polygonShape2.dispose();
+            beepolygonShape.setAsBox(bee.bounds.width / 2.0f, bee.bounds.height / 2.0f, origin, 0);
+            FixtureDef beeFixtureDef = new FixtureDef();
+            beeFixtureDef.shape = beepolygonShape;
+            beeBody.createFixture(beeFixtureDef);
+            beepolygonShape.dispose();
         }
-        
+
         for (Pile pile : level.piles)
         {
-            BodyDef bodyDef3 = new BodyDef();
-            bodyDef3.type = BodyType.KinematicBody;
-            bodyDef3.position.set(pile.position);
-            Body body2 = b2World.createBody(bodyDef3);
-            pile.body = body2;
-            PolygonShape polygonShape2 = new PolygonShape();
+            BodyDef pileBodyDef = new BodyDef();
+            pileBodyDef.type = BodyType.KinematicBody;
+            pileBodyDef.position.set(pile.position);
+            Body pileBody = b2World.createBody(pileBodyDef);
+            pileBody.setUserData(pile);
+            pile.body = pileBody;
+            PolygonShape pilePolygonShape = new PolygonShape();
             origin.x = pile.bounds.width / 2.0f;
             origin.y = pile.bounds.height / 2.0f;
-            polygonShape2.setAsBox(pile.bounds.width / 2.0f, pile.bounds.height / 2.0f, origin, 0);
-            FixtureDef fixtureDef2 = new FixtureDef();
-            fixtureDef2.shape = polygonShape2;
-            body2.createFixture(fixtureDef2);
-            polygonShape2.dispose();
+            pilePolygonShape.setAsBox(pile.bounds.width / 2.0f, pile.bounds.height / 2.0f, origin, 0);
+            FixtureDef pileFixtureDef = new FixtureDef();
+            pileFixtureDef.shape = pilePolygonShape;
+            pileBody.createFixture(pileFixtureDef);
+            pilePolygonShape.dispose();
         }
-        
 
     }
 
@@ -231,10 +257,10 @@ public class WorldController extends InputAdapter implements Disposable
     {
         return level.pooch.position.y < -5;
     }
-
+    /**
     /*
      * when the bunny collides with a rock it should not fall through
-     */
+     *
     private void onCollisionBunnyHeadWithRock(Rock rock)
     {
         Pooch pooch = level.pooch;
@@ -266,7 +292,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     /*
      * when the bunny collides with a treat it should collect it
-     */
+     *
     private void onCollisionBunnyWithTreat(Treat treat)
     {
         treat.collected = true;
@@ -277,7 +303,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     /*
      * when the bunny collides with a pile it can't jump as high
-     */
+     *
     private void onCollisionBunnyWithPile(Pile pile)
     {
         pile.collected = true;
@@ -290,7 +316,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     /*
      * when the bunny collides with a bee it should loose points
-     */
+     *
     private void onCollisionBunnyWithBee(Bee bee)
     {
         bee.collected = true;
@@ -309,7 +335,7 @@ public class WorldController extends InputAdapter implements Disposable
         spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
     }
 
-    /**
+
         /*
          * test all of the collisions 
          
@@ -380,14 +406,14 @@ public class WorldController extends InputAdapter implements Disposable
 
     private void checkForCollisions()
     {
-        r1.set(level.pooch.position.x, level.pooch.position.y, level.pooch.bounds.width, level.pooch.bounds.height);
+       /* r1.set(level.pooch.position.x, level.pooch.position.y, level.pooch.bounds.width, level.pooch.bounds.height);
 
         for (Rock rock : level.rocks)
         {
             r2.set(rock.position.x, rock.position.y, rock.bounds.width, rock.bounds.height);
             if (!r1.overlaps(r2))
                 continue;
-            onCollisionBunnyHeadWithRock(rock);
+           //onCollisionBunnyHeadWithRock(rock);
         }
         for (Treat treat : level.treats)
         {
@@ -397,11 +423,11 @@ public class WorldController extends InputAdapter implements Disposable
 
             if (!(r1.overlaps(r2)))
                 continue;
-            onCollisionBunnyWithTreat(treat);
+           // onCollisionBunnyWithTreat(treat);
             flagForRemoval(treat);
         }
-        
-      //Test collsion: pooch with piles
+
+        //Test collsion: pooch with piles
         for (Pile pile : level.piles)
         {
 
@@ -411,8 +437,9 @@ public class WorldController extends InputAdapter implements Disposable
 
             if (!r1.overlaps(r2))
                 continue;
-            onCollisionBunnyWithPile(pile);
-            
+           // onCollisionBunnyWithPile(pile);
+            flagForRemoval(pile);
+
         }
 
         //Test collsion: pooch with bees
@@ -425,8 +452,9 @@ public class WorldController extends InputAdapter implements Disposable
 
             if (!r1.overlaps(r2))
                 continue;
-            onCollisionBunnyWithBee(bee);
-            
+            //onCollisionBunnyWithBee(bee);
+            flagForRemoval(bee);
+
         }
         //Test Collision: Bunny Head with Goal
         if (!goalReached)
@@ -434,9 +462,9 @@ public class WorldController extends InputAdapter implements Disposable
             r2.set(level.bone.bounds);
             r2.x += level.bone.position.x;
             r2.y += level.bone.position.y;
-            if (r1.overlaps(r2))
-                onCollisionBunnyWithGoal();
-        }
+           // if (r1.overlaps(r2))
+              //  onCollisionBunnyWithGoal();
+        }*/
     }
 
     public void flagForRemoval(AbstractGameObject obj)
@@ -465,52 +493,61 @@ public class WorldController extends InputAdapter implements Disposable
                         b2World.destroyBody(obj.body);
                     }
                 }
+                if (obj instanceof Treat)
+                {
+                    int index = level.treats.indexOf((Treat) obj, true);
+                    if (index != -1)
+                    {
+                        level.treats.removeIndex(index);
+                        b2World.destroyBody(obj.body);
+                    }
+                }
             }
             objectsToRemove.removeRange(0, objectsToRemove.size - 1);
         }
 
-       // handleInputGame(deltaTime);
-/*
-        if (MathUtils.random(0.0f, 2.0f) < deltaTime)
-        {
-            // Temp Location to Trigger Blocks
-            Vector2 centerPos = new Vector2(level.player.position);
-            centerPos.x += level.player.bounds.width;
-            spawnBlocks(centerPos, Constants.BLOCKS_SPAWN_MAX, Constants.BLOCKS_SPAWN_RADIUS);
-        }*/
+        // handleInputGame(deltaTime);
+        /*
+                if (MathUtils.random(0.0f, 2.0f) < deltaTime)
+                {
+                    // Temp Location to Trigger Blocks
+                    Vector2 centerPos = new Vector2(level.player.position);
+                    centerPos.x += level.player.bounds.width;
+                    spawnBlocks(centerPos, Constants.BLOCKS_SPAWN_MAX, Constants.BLOCKS_SPAWN_RADIUS);
+                }*/
 
-        b2World.step(deltaTime, 8, 3); // Tell the Box2D world to update.
+        b2World.step(deltaTime, 8, 8); // Tell the Box2D world to update.
         level.update(deltaTime);
-        checkForCollisions();
+        //checkForCollisions();
 
         cameraHelper.update(deltaTime);
-         handleDebugInput(deltaTime);
-         if (isGameOver() || goalReached)
-         {
-             timeLeftGameOverDelay -= deltaTime;
-             if (timeLeftGameOverDelay < 0)
-                 backToMenu();
-         }
-         else
-         {
-             handleInputGame(deltaTime);
-         }
-         b2World.step(deltaTime, 8, 3);
-         cameraHelper.update(deltaTime);
-         if (!isGameOver() && isPlayerInWater())
-         {
-             AudioManager.instance.play(Assets.instance.sounds.liveLost);
-             lives--;
-             if (isGameOver())
-                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
-             else
-                 initLevel();
-         }
-         if (livesVisual > lives)
-             livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
-         if (scoreVisual < score)
-             scoreVisual = Math.min(score, scoreVisual + 250 * deltaTime);
-        
+        handleDebugInput(deltaTime);
+        if (isGameOver() || goalReached)
+        {
+            timeLeftGameOverDelay -= deltaTime;
+            if (timeLeftGameOverDelay < 0)
+                backToMenu();
+        }
+        else
+        {
+            handleInputGame(deltaTime);
+        }
+        b2World.step(deltaTime, 8, 3);
+        cameraHelper.update(deltaTime);
+        if (!isGameOver() && isPlayerInWater())
+        {
+            AudioManager.instance.play(Assets.instance.sounds.liveLost);
+            lives--;
+            if (isGameOver())
+                timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
+            else
+                initLevel();
+        }
+        if (livesVisual > lives)
+            livesVisual = Math.max(lives, livesVisual - 1 * deltaTime);
+        if (scoreVisual < score)
+            scoreVisual = Math.min(score, scoreVisual + 250 * deltaTime);
+
     }
 
     /*
@@ -616,13 +653,16 @@ public class WorldController extends InputAdapter implements Disposable
 
             //Bunny Jump
             if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE))
+            {
                 level.pooch.setJumping(true);
+            }
+
             else
                 level.pooch.setJumping(false);
         }
     }
 
-    private void spawnCarrots(Vector2 pos, int numCarrots, float radius)
+    public void spawnCarrots(Vector2 pos, int numCarrots, float radius)
     {
         float carrotShapeScale = 0.5f;
         //create carrots with box2d body and fixture

@@ -185,7 +185,7 @@ public class Level
                 else if (BLOCK_TYPE.ITEM_BONE.sameColor(currentPixel))
                 {
                     obj = new Bone();
-                    offsetHeight = -1.25f;
+                    offsetHeight = -0.25f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     bone = (Bone) obj;
                 }
