@@ -15,7 +15,6 @@ import com.luckenbaughgdx.game.objects.Bee;
 import com.luckenbaughgdx.game.objects.Bone;
 import com.luckenbaughgdx.game.objects.Pile;
 import com.luckenbaughgdx.game.objects.Pooch;
-import com.luckenbaughgdx.game.objects.Pooch.JUMP_STATE;
 import com.luckenbaughgdx.game.objects.Rock;
 import com.luckenbaughgdx.game.objects.Treat;
 
@@ -27,7 +26,7 @@ public class CollisionHandler implements ContactListener
 
     public CollisionHandler(WorldController w)
     {
-    	world = w;
+        world = w;
         listeners = new ObjectMap<Short, ObjectMap<Short, ContactListener>>();
     }
 
@@ -44,8 +43,8 @@ public class CollisionHandler implements ContactListener
         Fixture fixtureB = contact.getFixtureB();
 
         //Gdx.app.log("CollisionHandler-begin A", "begin");
-
-       // processContact(contact);
+        processContact(contact);
+        // processContact(contact);
 
         ContactListener listener = getListener(fixtureA.getFilterData().categoryBits, fixtureB.getFilterData().categoryBits);
         if (listener != null)
@@ -53,7 +52,7 @@ public class CollisionHandler implements ContactListener
             listener.beginContact(contact);
         }
     }
-    
+
     @Override
     public void preSolve(Contact contact, Manifold oldManifold)
     {
@@ -77,26 +76,22 @@ public class CollisionHandler implements ContactListener
             listener.postSolve(contact, impulse);
         }
     }
-    
+
     @Override
     public void endContact(Contact contact)
     {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
 
-       // Gdx.app.log("CollisionHandler-end A", "end");
-        processContact(contact);
-
         // Gdx.app.log("CollisionHandler-end A", fixtureA.getBody().getLinearVelocity().x+" : "+fixtureA.getBody().getLinearVelocity().y);
-        // Gdx.app.log("CollisionHandler-end B", fixtureB.getBody().getLinearVelocity().x+" : "+fixtureB.getBody().getLinearVelocity().y);
+        processContactEnd(contact);
+
         ContactListener listener = getListener(fixtureA.getFilterData().categoryBits, fixtureB.getFilterData().categoryBits);
         if (listener != null)
         {
             listener.endContact(contact);
         }
     }
-
-    
 
     private void addListenerInternal(short categoryA, short categoryB, ContactListener listener)
     {
@@ -121,54 +116,70 @@ public class CollisionHandler implements ContactListener
 
     private void processContact(Contact contact)
     {
-    	Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
-        AbstractGameObject objA = (AbstractGameObject)fixtureA.getBody().getUserData();
-        AbstractGameObject objB = (AbstractGameObject)fixtureB.getBody().getUserData();
+        AbstractGameObject objA = (AbstractGameObject) fixtureA.getBody().getUserData();
+        AbstractGameObject objB = (AbstractGameObject) fixtureB.getBody().getUserData();
 
         if (objA instanceof Pooch)
         {
-        	processPlayerContact(fixtureA, fixtureB);
+            processPlayerContact(fixtureA, fixtureB);
         }
         else if (objB instanceof Pooch)
         {
-        	processPlayerContact(fixtureB, fixtureA);
+            processPlayerContact(fixtureB, fixtureA);
         }
     }
 
+    private void processContactEnd(Contact contact)
+    {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+        AbstractGameObject objA = (AbstractGameObject) fixtureA.getBody().getUserData();
+        AbstractGameObject objB = (AbstractGameObject) fixtureB.getBody().getUserData();
+
+        if (objA instanceof Pooch)
+        {
+            processPlayerContactEnd(fixtureA, fixtureB);
+        }
+        else if (objB instanceof Pooch)
+        {
+            processPlayerContactEnd(fixtureB, fixtureA);
+        }
+    }
     private void processPlayerContact(Fixture playerFixture, Fixture objFixture)
     {
-    	if (objFixture.getBody().getUserData() instanceof Rock)
-    	{
-    		Pooch player = (Pooch)playerFixture.getBody().getUserData();
-    	    player.acceleration.y = -9.81f;
-    	    player.velocity.y = 0;
-    	    //player.jumpState = JUMP_STATE.GROUNDED;
-    	    playerFixture.getBody().setLinearVelocity(player.velocity);
-    	}
-    	else if (objFixture.getBody().getUserData() instanceof Treat)
-    	{
-    	    Treat treat = (Treat)objFixture.getBody().getUserData();
+        if (objFixture.getBody().getUserData() instanceof Rock)
+        {
+            Pooch player = (Pooch) playerFixture.getBody().getUserData();
+            //playerFixture.getBody().setLinearVelocity(player.velocity);
+            player.dustParticles.start();
+            world.spacePressed = false;
+
+        }
+        else if (objFixture.getBody().getUserData() instanceof Treat)
+        {
+            Treat treat = (Treat) objFixture.getBody().getUserData();
             treat.collected = true;
             AudioManager.instance.play(Assets.instance.sounds.pickupTreat);
             world.score += treat.getScore();
-    		world.flagForRemoval(treat);
-    	}
+            world.flagForRemoval(treat);
+        }
         else if (objFixture.getBody().getUserData() instanceof Bee)
         {
-            Bee bee = (Bee)objFixture.getBody().getUserData();
+            Bee bee = (Bee) objFixture.getBody().getUserData();
             bee.collected = true;
             AudioManager.instance.play(Assets.instance.sounds.hitBee);
-            world.score += bee.getScore();            
+            world.score += bee.getScore();
             world.flagForRemoval(bee);
         }
         else if (objFixture.getBody().getUserData() instanceof Pile)
         {
-            Pile pile = (Pile)objFixture.getBody().getUserData();
+            Pile pile = (Pile) objFixture.getBody().getUserData();
             pile.collected = true;
             AudioManager.instance.play(Assets.instance.sounds.hitPile);
             world.score += pile.getScore();
-            world.level.pooch.setPilePowerdown(true);          
+            world.level.pooch.setPilePowerdown(true);
             world.flagForRemoval(pile);
         }
         else if (objFixture.getBody().getUserData() instanceof Bone)
@@ -179,6 +190,23 @@ public class CollisionHandler implements ContactListener
             centerPosBunnyHead.x += world.level.pooch.bounds.width;
             world.spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
         }
+    }
+    private void processPlayerContactEnd(Fixture playerFixture, Fixture objFixture)
+    {
+        if (objFixture.getBody().getUserData() instanceof Rock)
+        {
+            Pooch player = (Pooch) playerFixture.getBody().getUserData();
+            //playerFixture.getBody().setLinearVelocity(player.velocity);
+            if(player.hasPilePowerdown)
+                AudioManager.instance.play(Assets.instance.sounds.jumpWithPile);
+            else
+                AudioManager.instance.play(Assets.instance.sounds.jump);
+            player.dustParticles.allowCompletion();
+           // world.spacePressed = true;
+
+
+        }
+
     }
 
 }

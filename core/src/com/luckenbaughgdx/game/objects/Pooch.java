@@ -26,24 +26,20 @@ public class Pooch extends AbstractGameObject
     private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.018f;
 
     public ParticleEffect dustParticles = new ParticleEffect();
+    
+
 
     public enum VIEW_DIRECTION
     {
         LEFT, RIGHT
     }
 
-    public enum JUMP_STATE
-    {
-        GROUNDED, FALLING, JUMP_RISING, JUMP_FALLING
-    }
 
     // private TextureRegion regPooch;
 
     public VIEW_DIRECTION viewDirection;
 
     public float timeJumping;
-
-    public JUMP_STATE jumpState;
 
     public boolean hasPilePowerdown;
 
@@ -75,8 +71,6 @@ public class Pooch extends AbstractGameObject
         acceleration.set(0.0f, -25.0f);
         //view direction
         viewDirection = VIEW_DIRECTION.RIGHT;
-        //jump state
-        jumpState = JUMP_STATE.FALLING;
         timeJumping = 0;
         //power ups
         hasPilePowerdown = false;
@@ -91,52 +85,12 @@ public class Pooch extends AbstractGameObject
      */
     public void setJumping(boolean jumpKeyPressed)
     {
-
         if (jumpKeyPressed)
         {
             velocity.y = terminalVelocity.y;
             body.setLinearVelocity(velocity);
             position.set(body.getPosition());
         }
-        /* switch (jumpState)
-         {
-         case GROUNDED: //Character is standing on a platform
-             if (jumpKeyPressed)
-             {
-                 AudioManager.instance.play(Assets.instance.sounds.jump);
-                 timeJumping = 0;
-                 jumpState = JUMP_STATE.JUMP_RISING;
-             }
-             else if (velocity.x != 0)
-             {
-                 //Gdx.app.log(TAG, "starting particles");
-                 dustParticles.setPosition(position.x + dimension.x / 2, position.y + 0.1f);
-                 dustParticles.start();
-             }
-             else if (velocity.x == 0)
-             {
-                 dustParticles.allowCompletion();
-             }
-             break;
-         case JUMP_RISING: //rising in the air
-             if (!jumpKeyPressed)
-                 jumpState = JUMP_STATE.JUMP_FALLING;
-             if (jumpKeyPressed && hasPilePowerdown)
-             {
-                 jumpState = JUMP_STATE.JUMP_FALLING;
-             }
-             break;
-         case FALLING: //falling down
-         case JUMP_FALLING: //falling down after jump
-             if (jumpKeyPressed && hasPilePowerdown)
-             {
-                 AudioManager.instance.play(Assets.instance.sounds.jumpWithPile, 1, MathUtils.random(1.0f, 1.1f));
-
-                 //  timeJumping = JUMP_TIME_OFFSET_FLYING;
-                 jumpState = JUMP_STATE.JUMP_FALLING;
-             }
-             break;
-         }*/
     }
 
     /*
@@ -148,7 +102,10 @@ public class Pooch extends AbstractGameObject
         if (pickedUp)
         {
             timeLeftPilePowerdown = Constants.ITEM_PILE_POWERDOWN_DURATION;
+            hasPilePowerdown = true;
         }
+        else
+            hasPilePowerdown = false;
     }
 
     /*
@@ -167,6 +124,9 @@ public class Pooch extends AbstractGameObject
         updateMotionX(deltaTime);
         updateMotionY(deltaTime);
 
+        
+        dustParticles.setPosition(position.x + dimension.x / 2, position.y);
+        //dustParticles.start();
         if (body != null)
         {
             // Gdx.app.log(TAG, "velY: "+velocity.y+" state: "+jumpState);
@@ -191,53 +151,6 @@ public class Pooch extends AbstractGameObject
                 timeLeftPilePowerdown = 0;
                 setPilePowerdown(false);
             }
-        }
-    }
-
-    /*
-     * update the motion in the y direction
-     * (non-Javadoc)
-     * @see com.luckenbaughgdx.game.objects.AbstractGameObject#updateMotionY(float)
-     */
-    @Override
-    protected void updateMotionY(float deltaTime)
-    {
-        switch (jumpState)
-        {
-        case GROUNDED:
-            jumpState = JUMP_STATE.FALLING;
-            if (velocity.x != 0)
-            {
-                dustParticles.setPosition(position.x + dimension.x / 2, position.y);
-                dustParticles.start();
-            }
-            break;
-        case JUMP_RISING:
-            //Keep track of jump time
-            timeJumping += deltaTime;
-            //jump time left
-            if (timeJumping <= JUMP_TIME_MAX)
-            {
-                //still jumping
-                velocity.y = terminalVelocity.y;
-            }
-            break;
-        case FALLING:
-            break;
-        case JUMP_FALLING:
-            //add deltaTime to track the jump time
-            timeJumping += deltaTime;
-            //jump to minimal height if jump key was pressed too short
-            if (timeJumping > 0 && timeJumping <= JUMP_TIME_MIN)
-            {
-                //still jumping
-                velocity.y = terminalVelocity.y;
-            }
-        }
-        if (jumpState != JUMP_STATE.GROUNDED)
-        {
-            super.updateMotionY(deltaTime);
-            dustParticles.allowCompletion();
         }
     }
 

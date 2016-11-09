@@ -23,7 +23,6 @@ import com.luckenbaughgdx.game.objects.Clouds;
 import com.luckenbaughgdx.game.objects.House;
 import com.luckenbaughgdx.game.objects.Pile;
 import com.luckenbaughgdx.game.objects.Pooch;
-import com.luckenbaughgdx.game.objects.Pooch.JUMP_STATE;
 import com.luckenbaughgdx.game.objects.Treat;
 import com.luckenbaughgdx.game.objects.Rock;
 import com.luckenbaughgdx.game.screens.MenuScreen;
@@ -37,12 +36,6 @@ import com.luckenbaughgdx.game.util.Constants;
  */
 public class WorldController extends InputAdapter implements Disposable
 {
-
-    // Non-Box2D Collisions
-    private Rectangle r1 = new Rectangle();
-
-    private Rectangle r2 = new Rectangle();
-
     public float timeLeftGameOverDelay;
 
     private Game game;
@@ -64,6 +57,8 @@ public class WorldController extends InputAdapter implements Disposable
     float scoreVisual;
 
     public boolean goalReached;
+    
+    public boolean spacePressed;
 
     // Box2D Collisions
     public World b2World;
@@ -257,215 +252,7 @@ public class WorldController extends InputAdapter implements Disposable
     {
         return level.pooch.position.y < -5;
     }
-    /**
-    /*
-     * when the bunny collides with a rock it should not fall through
-     *
-    private void onCollisionBunnyHeadWithRock(Rock rock)
-    {
-        Pooch pooch = level.pooch;
-        float heightDifference = Math.abs(pooch.position.y - (rock.position.y + rock.bounds.height));
-        if (heightDifference > 0.5f)
-        {
-            boolean hitRightEdge = pooch.position.x > (rock.position.x + rock.bounds.width / 2.0f);
-            if (hitRightEdge)
-                pooch.position.x = rock.position.x + rock.bounds.width;
-            else
-                pooch.position.x = rock.position.x - pooch.bounds.width;
-            return;
-        }
-
-        switch (pooch.jumpState)
-        {
-        case GROUNDED:
-            break;
-        case FALLING:
-        case JUMP_FALLING:
-            pooch.position.y = rock.position.y + pooch.bounds.height;
-            pooch.jumpState = JUMP_STATE.GROUNDED;
-            break;
-        case JUMP_RISING:
-            pooch.position.y = rock.position.y + pooch.bounds.height + pooch.origin.y;
-            break;
-        }
-    }
-
-    /*
-     * when the bunny collides with a treat it should collect it
-     *
-    private void onCollisionBunnyWithTreat(Treat treat)
-    {
-        treat.collected = true;
-        AudioManager.instance.play(Assets.instance.sounds.pickupTreat);
-        score += treat.getScore();
-        Gdx.app.log(TAG, "Treat collected");
-    }
-
-    /*
-     * when the bunny collides with a pile it can't jump as high
-     *
-    private void onCollisionBunnyWithPile(Pile pile)
-    {
-        pile.collected = true;
-        AudioManager.instance.play(Assets.instance.sounds.hitPile);
-        score += pile.getScore();
-        level.pooch.setPilePowerdown(true);
-        Gdx.app.log(TAG, "Pile Hit");
-
-    }
-
-    /*
-     * when the bunny collides with a bee it should loose points
-     *
-    private void onCollisionBunnyWithBee(Bee bee)
-    {
-        bee.collected = true;
-        AudioManager.instance.play(Assets.instance.sounds.hitBee);
-        score += bee.getScore();
-        Gdx.app.log(TAG, "Bee Hit");
-
-    }
-
-    private void onCollisionBunnyWithGoal()
-    {
-        goalReached = true;
-        timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
-        Vector2 centerPosBunnyHead = new Vector2(level.pooch.position);
-        centerPosBunnyHead.x += level.pooch.bounds.width;
-        spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
-    }
-
-
-        /*
-         * test all of the collisions 
-         
-        private void testCollisions()
-        {
-            r1.set(level.pooch.position.x, level.pooch.position.y, level.pooch.bounds.width, level.pooch.bounds.height);
-            //test collison bunny head with rocks
-            for (Rock rock : level.rocks)
-            {
-                r2.set(rock.position.x, rock.position.y, rock.bounds.width, rock.bounds.height);
-                if (!r1.overlaps(r2))
-                    continue;
-                onCollisionBunnyHeadWithRock(rock);
-                //IMPORTANT: must do all collisions for valid edge testing on rocks
-            }
-
-            //Test collsion: pooch with a treat
-            for (Treat treat : level.treats)
-            {
-                if (treat.collected)
-                    continue;
-                r2.set(treat.position.x, treat.position.y, treat.bounds.width, treat.bounds.height);
-
-                if (!(r1.overlaps(r2)))
-                    continue;
-
-                onCollisionBunnyWithTreat(treat);
-
-                break;
-            }
-
-            //Test collsion: pooch with piles
-            for (Pile pile : level.piles)
-            {
-
-                if (pile.collected)
-                    continue;
-                r2.set(pile.position.x, pile.position.y, pile.bounds.width, pile.bounds.height);
-
-                if (!r1.overlaps(r2))
-                    continue;
-                onCollisionBunnyWithPile(pile);
-                break;
-            }
-
-            //Test collsion: pooch with bees
-            for (Bee bee : level.bees)
-            {
-
-                if (bee.collected)
-                    continue;
-                r2.set(bee.position.x, bee.position.y, bee.bounds.width, bee.bounds.height);
-
-                if (!r1.overlaps(r2))
-                    continue;
-                onCollisionBunnyWithBee(bee);
-                break;
-            }
-            //Test Collision: Bunny Head with Goal
-            if (!goalReached)
-            {
-                r2.set(level.bone.bounds);
-                r2.x += level.bone.position.x;
-                r2.y += level.bone.position.y;
-                if (r1.overlaps(r2))
-                    onCollisionBunnyWithGoal();
-            }**/
-
-    private void checkForCollisions()
-    {
-       /* r1.set(level.pooch.position.x, level.pooch.position.y, level.pooch.bounds.width, level.pooch.bounds.height);
-
-        for (Rock rock : level.rocks)
-        {
-            r2.set(rock.position.x, rock.position.y, rock.bounds.width, rock.bounds.height);
-            if (!r1.overlaps(r2))
-                continue;
-           //onCollisionBunnyHeadWithRock(rock);
-        }
-        for (Treat treat : level.treats)
-        {
-            if (treat.collected)
-                continue;
-            r2.set(treat.position.x, treat.position.y, treat.bounds.width, treat.bounds.height);
-
-            if (!(r1.overlaps(r2)))
-                continue;
-           // onCollisionBunnyWithTreat(treat);
-            flagForRemoval(treat);
-        }
-
-        //Test collsion: pooch with piles
-        for (Pile pile : level.piles)
-        {
-
-            if (pile.collected)
-                continue;
-            r2.set(pile.position.x, pile.position.y, pile.bounds.width, pile.bounds.height);
-
-            if (!r1.overlaps(r2))
-                continue;
-           // onCollisionBunnyWithPile(pile);
-            flagForRemoval(pile);
-
-        }
-
-        //Test collsion: pooch with bees
-        for (Bee bee : level.bees)
-        {
-
-            if (bee.collected)
-                continue;
-            r2.set(bee.position.x, bee.position.y, bee.bounds.width, bee.bounds.height);
-
-            if (!r1.overlaps(r2))
-                continue;
-            //onCollisionBunnyWithBee(bee);
-            flagForRemoval(bee);
-
-        }
-        //Test Collision: Bunny Head with Goal
-        if (!goalReached)
-        {
-            r2.set(level.bone.bounds);
-            r2.x += level.bone.position.x;
-            r2.y += level.bone.position.y;
-           // if (r1.overlaps(r2))
-              //  onCollisionBunnyWithGoal();
-        }*/
-    }
+  
 
     public void flagForRemoval(AbstractGameObject obj)
     {
@@ -502,21 +289,21 @@ public class WorldController extends InputAdapter implements Disposable
                         b2World.destroyBody(obj.body);
                     }
                 }
+                if (obj instanceof Pile)
+                {
+                    int index = level.piles.indexOf((Pile) obj, true);
+                    if (index != -1)
+                    {
+                        level.piles.removeIndex(index);
+                        b2World.destroyBody(obj.body);
+                    }
+                }
             }
             objectsToRemove.removeRange(0, objectsToRemove.size - 1);
         }
 
-        // handleInputGame(deltaTime);
-        /*
-                if (MathUtils.random(0.0f, 2.0f) < deltaTime)
-                {
-                    // Temp Location to Trigger Blocks
-                    Vector2 centerPos = new Vector2(level.player.position);
-                    centerPos.x += level.player.bounds.width;
-                    spawnBlocks(centerPos, Constants.BLOCKS_SPAWN_MAX, Constants.BLOCKS_SPAWN_RADIUS);
-                }*/
 
-        b2World.step(deltaTime, 8, 8); // Tell the Box2D world to update.
+        b2World.step(deltaTime, 8, 3); // Tell the Box2D world to update.
         level.update(deltaTime);
         //checkForCollisions();
 
@@ -631,6 +418,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     private void handleInputGame(float deltaTime)
     {
+        
         if (cameraHelper.hasTarget(level.pooch))
         {
             //player movement
@@ -652,9 +440,11 @@ public class WorldController extends InputAdapter implements Disposable
             }
 
             //Bunny Jump
-            if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE))
+            if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE) && spacePressed == false)
             {
+
                 level.pooch.setJumping(true);
+                
             }
 
             else
