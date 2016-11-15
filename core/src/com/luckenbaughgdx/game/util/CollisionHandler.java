@@ -147,6 +147,7 @@ public class CollisionHandler implements ContactListener
             processPlayerContactEnd(fixtureB, fixtureA);
         }
     }
+
     private void processPlayerContact(Fixture playerFixture, Fixture objFixture)
     {
         if (objFixture.getBody().getUserData() instanceof Rock)
@@ -191,19 +192,19 @@ public class CollisionHandler implements ContactListener
             world.spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
         }
     }
+
     private void processPlayerContactEnd(Fixture playerFixture, Fixture objFixture)
     {
         if (objFixture.getBody().getUserData() instanceof Rock)
         {
             Pooch player = (Pooch) playerFixture.getBody().getUserData();
             //playerFixture.getBody().setLinearVelocity(player.velocity);
-            if(player.hasPilePowerdown)
+            if (player.hasPilePowerdown)
                 AudioManager.instance.play(Assets.instance.sounds.jumpWithPile);
             else
                 AudioManager.instance.play(Assets.instance.sounds.jump);
             player.dustParticles.allowCompletion();
-           // world.spacePressed = true;
-
+             world.spacePressed = true;
 
         }
 

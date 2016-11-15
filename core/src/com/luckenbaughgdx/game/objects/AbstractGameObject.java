@@ -3,6 +3,7 @@ package com.luckenbaughgdx.game.objects;
 /*
  * Abtract game object that is implemented by the game objects
  */
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -37,6 +38,16 @@ public abstract class AbstractGameObject
 
     public Body body;
 
+    public float stateTime;
+
+    public Animation animation;
+
+    public void setAnimation(Animation animation)
+    {
+        this.animation = animation;
+        stateTime = 0;
+    }
+
     /*
      * overall attributes of all game objects
      */
@@ -57,6 +68,7 @@ public abstract class AbstractGameObject
     //each object will be updated with its motion
     public void update(float deltaTime)
     {
+        stateTime += deltaTime;
         if (body == null)
         {
             updateMotionX(deltaTime);
@@ -98,9 +110,6 @@ public abstract class AbstractGameObject
         velocity.x = MathUtils.clamp(velocity.x, -terminalVelocity.x, terminalVelocity.x);
     }
 
-    /*
-     * update the motion in the y direction
-     */
     protected void updateMotionY(float deltaTime)
     {
         if (velocity.y != 0)

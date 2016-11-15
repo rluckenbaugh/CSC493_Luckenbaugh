@@ -8,9 +8,11 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.luckenbaughgdx.game.util.Constants;
 /**
@@ -131,17 +133,30 @@ public class Assets implements Disposable, AssetErrorListener
 	public class AssetPooch
 	{
 		public final AtlasRegion stand;
-		public final AtlasRegion sit;
-		public final AtlasRegion lunge;
-		public final AtlasRegion run;
-		
+
+        public final Animation animSit;
+        public final Animation animRun;
+
+        public final Animation animJump;
 		public AssetPooch (TextureAtlas atlas)
 		{
-			stand = atlas.findRegion("dog2");
-			sit = atlas.findRegion("dog1");
-			lunge = atlas.findRegion("dog3");
-			run = atlas.findRegion("dog4");
-			
+
+	        stand = atlas.findRegion("dog");
+
+            Array<AtlasRegion> regions = null;
+            AtlasRegion region = null;
+
+            //Animation: sit
+            regions = atlas.findRegions("dog_sit");
+            animSit = new Animation(1.0f / 10.0f, regions);
+
+            //Animation: run
+            regions = atlas.findRegions("dog_run");
+            animRun = new Animation(1.0f / 10.0f, regions, Animation.PlayMode.LOOP_PINGPONG);
+
+            //Animation jump
+            regions = atlas.findRegions("dog_jump");
+            animJump = new Animation(1.0f / 4.0f, regions, Animation.PlayMode.NORMAL);
 		}
 	}
 	

@@ -439,7 +439,7 @@ public class WorldController extends InputAdapter implements Disposable
                 }
             }
 
-            //Bunny Jump
+            //Pooch Jump
             if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Keys.SPACE) && spacePressed == false)
             {
 

@@ -39,13 +39,20 @@ cream-picket-fence-hi
   orig: 600, 365
   offset: 0, 0
   index: -1
-dog1
+dog
   rotate: false
   xy: 755, 331
   size: 65, 63
   orig: 65, 63
   offset: 0, 0
   index: -1
+dog_sit
+  rotate: false
+  xy: 755, 331
+  size: 65, 63
+  orig: 65, 63
+  offset: 0, 0
+  index: 1
 dog1blue
   rotate: false
   xy: 295, 14
@@ -55,13 +62,6 @@ dog1blue
   index: -1
 dog1pink
   rotate: false
-  xy: 957, 446
-  size: 65, 64
-  orig: 65, 64
-  offset: 0, 0
-  index: -1
-dog2
-  rotate: false
   xy: 890, 399
   size: 65, 64
   orig: 65, 64
@@ -69,23 +69,16 @@ dog2
   index: -1
 dog2blue
   rotate: false
-  xy: 957, 380
+  xy: 957, 446
   size: 65, 64
   orig: 65, 64
   offset: 0, 0
   index: -1
 dog2pink
   rotate: false
-  xy: 228, 13
+  xy: 957, 380
   size: 65, 64
   orig: 65, 64
-  offset: 0, 0
-  index: -1
-dog3
-  rotate: false
-  xy: 678, 397
-  size: 76, 64
-  orig: 76, 64
   offset: 0, 0
   index: -1
 dog3blue
@@ -97,32 +90,53 @@ dog3blue
   index: -1
 dog3pink
   rotate: false
-  xy: 303, 79
+  xy: 678, 397
   size: 76, 64
   orig: 76, 64
   offset: 0, 0
   index: -1
-dog4
+dog4blue
   rotate: false
   xy: 162, 9
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-dog4blue
+dog4pink
   rotate: false
   xy: 362, 9
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-dog4pink
+dog_jump
+  rotate: false
+  xy: 303, 79
+  size: 76, 64
+  orig: 76, 64
+  offset: 0, 0
+  index: 1
+dog_jump
   rotate: false
   xy: 428, 8
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
-  index: -1
+  index: 2
+dog_run
+  rotate: false
+  xy: 428, 8
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: 1
+dog_run
+  rotate: false
+  xy: 228, 13
+  size: 65, 64
+  orig: 65, 64
+  offset: 0, 0
+  index: 2
 doghouse
   rotate: false
   xy: 823, 397

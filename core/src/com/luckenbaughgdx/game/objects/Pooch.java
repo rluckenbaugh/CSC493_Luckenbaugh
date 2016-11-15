@@ -2,6 +2,7 @@ package com.luckenbaughgdx.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,14 +27,11 @@ public class Pooch extends AbstractGameObject
     private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.018f;
 
     public ParticleEffect dustParticles = new ParticleEffect();
-    
-
 
     public enum VIEW_DIRECTION
     {
         LEFT, RIGHT
     }
-
 
     // private TextureRegion regPooch;
 
@@ -44,6 +42,12 @@ public class Pooch extends AbstractGameObject
     public boolean hasPilePowerdown;
 
     public float timeLeftPilePowerdown;
+
+    public Animation animSit;
+
+    private Animation animJump;
+
+    public Animation animRun;
 
     TextureRegion regPooch;
 
@@ -58,15 +62,19 @@ public class Pooch extends AbstractGameObject
     public void init()
     {
         dimension.set(1, 1);
-
         regPooch = Assets.instance.pooch.stand;
+        animSit = Assets.instance.pooch.animSit;
+        animJump = Assets.instance.pooch.animJump;
+        animRun = Assets.instance.pooch.animRun;
+        setAnimation(animSit);
+
         //center image on game object
 
         origin.set(dimension.x / 2, dimension.y / 2);
         //bounding box for collision detection
         bounds.set(0, 0, dimension.x, dimension.y);
         //set physics values
-        terminalVelocity.set(3.0f, 4.0f);
+        terminalVelocity.set(3.0f, 6.0f);
         friction.set(12.0f, 0.0f);
         acceleration.set(0.0f, -25.0f);
         //view direction
@@ -90,6 +98,7 @@ public class Pooch extends AbstractGameObject
             velocity.y = terminalVelocity.y;
             body.setLinearVelocity(velocity);
             position.set(body.getPosition());
+            setAnimation(animJump);
         }
     }
 
@@ -124,7 +133,6 @@ public class Pooch extends AbstractGameObject
         updateMotionX(deltaTime);
         updateMotionY(deltaTime);
 
-        
         dustParticles.setPosition(position.x + dimension.x / 2, position.y);
         //dustParticles.start();
         if (body != null)
@@ -138,15 +146,37 @@ public class Pooch extends AbstractGameObject
         if (velocity.x != 0)
         {
             viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
+            dustParticles.start();
+            if (velocity.x < 0)
+            {
+                if (animation.isAnimationFinished(stateTime))
+                    if (animation != animRun)
+                        setAnimation(animRun);
+                viewDirection = VIEW_DIRECTION.LEFT;
+            }
+            else if (velocity.x > 0)
+            {
+                if (animation.isAnimationFinished(stateTime))
+                    if (animation != animRun)
+                        setAnimation(animRun);
+                viewDirection = VIEW_DIRECTION.RIGHT;
+            }
+        }
+        else
+        {
+            if (animation.isAnimationFinished(stateTime))
+                setAnimation(animSit);
+            dustParticles.allowCompletion();
+
         }
         if (timeLeftPilePowerdown > 0)
         {
             timeLeftPilePowerdown -= deltaTime;
 
-            terminalVelocity.set(2.0f, 4.0f);
+            terminalVelocity.set(2.5f, 5.0f);
             if (timeLeftPilePowerdown < 0)
             {
-                terminalVelocity.set(3.0f, 4.0f);
+                terminalVelocity.set(3.0f, 6.0f);
                 //disposable powerup
                 timeLeftPilePowerdown = 0;
                 setPilePowerdown(false);
@@ -171,19 +201,18 @@ public class Pooch extends AbstractGameObject
         //apply skin color
         batch.setColor(CharacterSkin.values()[GamePreferences.instances.charSkin].getColor());
 
-        //set special color when game object has a feather power up
-        if (hasPilePowerdown)
+        float dimCorrectionX = 0;
+        float dimCorrectionY = 0;
+        if (animation != animSit)
         {
-            batch.setColor(0.0f, 0.87f, 0.8f, 1.0f);
+            dimCorrectionX = 0.05f;
+            dimCorrectionY = 0.2f;
         }
+
         //draw image
-        reg = regPooch;
-        batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
-                reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);
-
-        //reset color to white
-        batch.setColor(1, 1, 1, 1);
-
+        reg = animation.getKeyFrame(stateTime, true);
+        batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x + dimCorrectionX, dimension.y + dimCorrectionY, scale.x, scale.y, rotation, reg.getRegionX(),
+                reg.getRegionY(), reg.getRegionWidth(), reg.getRegionHeight(), viewDirection == VIEW_DIRECTION.LEFT, false);
     }
 
 }
