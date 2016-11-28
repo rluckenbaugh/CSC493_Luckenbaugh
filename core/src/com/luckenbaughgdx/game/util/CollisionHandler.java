@@ -20,6 +20,8 @@ import com.luckenbaughgdx.game.objects.Treat;
 
 public class CollisionHandler implements ContactListener
 {
+    private static final String TAG = null;
+
     private ObjectMap<Short, ObjectMap<Short, ContactListener>> listeners;
 
     private WorldController world;
@@ -154,17 +156,22 @@ public class CollisionHandler implements ContactListener
         {
             Pooch player = (Pooch) playerFixture.getBody().getUserData();
             //playerFixture.getBody().setLinearVelocity(player.velocity);
-            player.dustParticles.start();
+            //player.dustParticles.start();
             world.spacePressed = false;
 
         }
         else if (objFixture.getBody().getUserData() instanceof Treat)
-        {
+        {   
+            Pooch player = (Pooch) playerFixture.getBody().getUserData();
+            player.treatParticles.start();
             Treat treat = (Treat) objFixture.getBody().getUserData();
+            Gdx.app.debug(TAG,"Treat hit");
             treat.collected = true;
             AudioManager.instance.play(Assets.instance.sounds.pickupTreat);
             world.score += treat.getScore();
             world.flagForRemoval(treat);
+            
+            //treat.treatParticles.allowCompletion();
         }
         else if (objFixture.getBody().getUserData() instanceof Bee)
         {

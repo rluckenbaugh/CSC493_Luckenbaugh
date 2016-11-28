@@ -28,10 +28,14 @@ public class Pooch extends AbstractGameObject
 
     public ParticleEffect dustParticles = new ParticleEffect();
 
+    public ParticleEffect treatParticles = new ParticleEffect();
+
     public enum VIEW_DIRECTION
     {
         LEFT, RIGHT
     }
+
+    boolean jumpPressed;
 
     // private TextureRegion regPooch;
 
@@ -85,6 +89,8 @@ public class Pooch extends AbstractGameObject
         timeLeftPilePowerdown = 0;
 
         //Particles
+        treatParticles.load(Gdx.files.internal("effects/crunchingTreat.pfx"), Gdx.files.internal("effects"));
+
         dustParticles.load(Gdx.files.internal("effects/CanyonBunnyDust.pfx"), Gdx.files.internal("effects"));
     }
 
@@ -93,12 +99,14 @@ public class Pooch extends AbstractGameObject
      */
     public void setJumping(boolean jumpKeyPressed)
     {
+        jumpPressed = jumpKeyPressed;
         if (jumpKeyPressed)
         {
             velocity.y = terminalVelocity.y;
             body.setLinearVelocity(velocity);
             position.set(body.getPosition());
             setAnimation(animJump);
+            dustParticles.allowCompletion();
         }
     }
 
@@ -134,19 +142,21 @@ public class Pooch extends AbstractGameObject
         updateMotionY(deltaTime);
 
         dustParticles.setPosition(position.x + dimension.x / 2, position.y);
-        //dustParticles.start();
+        treatParticles.setPosition(position.x + dimension.x, position.y + dimension.y);
+
         if (body != null)
         {
             // Gdx.app.log(TAG, "velY: "+velocity.y+" state: "+jumpState);
             body.setLinearVelocity(velocity);
             position.set(body.getPosition());
         }
-
+        treatParticles.update(deltaTime);
         dustParticles.update(deltaTime);
         if (velocity.x != 0)
         {
             viewDirection = velocity.x < 0 ? VIEW_DIRECTION.LEFT : VIEW_DIRECTION.RIGHT;
-            dustParticles.start();
+            if (!jumpPressed)
+                dustParticles.start();
             if (velocity.x < 0)
             {
                 if (animation.isAnimationFinished(stateTime))
@@ -197,6 +207,7 @@ public class Pooch extends AbstractGameObject
         //reset color to white
         batch.setColor(1, 1, 1, 1);
         dustParticles.draw(batch);
+        treatParticles.draw(batch);
 
         //apply skin color
         batch.setColor(CharacterSkin.values()[GamePreferences.instances.charSkin].getColor());
