@@ -206,11 +206,19 @@ public class Assets implements Disposable, AssetErrorListener
 	 */
 	public class AssetBee
 	{
-		public final AtlasRegion bee;
+		//public final AtlasRegion bee;
+		public final Animation animBee;
 		
 		public AssetBee (TextureAtlas atlas)
 		{
-			bee = atlas.findRegion("bee");
+			//bee = atlas.findRegion("bee");
+			
+			//Animation Bee
+			Array<AtlasRegion> regions = atlas.findRegions("bee");
+			//AtlasRegion region = regions.first();
+			//for (int i = 0;i<5;i++)
+			    //regions.insert(0,region);
+			animBee = new Animation(1.0f/ 10.0f,regions,Animation.PlayMode.LOOP_PINGPONG);
 		}
 	}
 	/*

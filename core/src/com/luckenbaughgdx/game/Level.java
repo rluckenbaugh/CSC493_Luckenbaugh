@@ -159,7 +159,7 @@ public class Level
                 else if (BLOCK_TYPE.ITEM_BEE.sameColor(currentPixel))
                 {
                     obj = new Bee();
-                    offsetHeight = -6.5f;
+                    offsetHeight = -5.5f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     bees.add((Bee) obj);
                 }
