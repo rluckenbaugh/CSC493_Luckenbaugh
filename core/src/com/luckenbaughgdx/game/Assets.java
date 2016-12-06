@@ -167,11 +167,16 @@ public class Assets implements Disposable, AssetErrorListener
 	{
 		public final AtlasRegion edge;
 		public final AtlasRegion middle;
+		public final AtlasRegion mudEdge;
+		public final AtlasRegion mudMiddle;
+		
 		
 		public AssetGround (TextureAtlas atlas)
 		{
 			edge = atlas.findRegion("edge");
 			middle = atlas.findRegion("middle");
+			mudEdge = atlas.findRegion("mudEdge");
+			mudMiddle = atlas.findRegion("mudMiddle");
 		}
 	}
 	

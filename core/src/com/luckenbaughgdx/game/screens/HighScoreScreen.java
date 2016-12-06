@@ -98,7 +98,6 @@ public class HighScoreScreen extends AbstractGameScreen
     protected void onNextClicked()
     {
         game.setScreen(new MenuScreen(game));
-
     }
 
     @Override

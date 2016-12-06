@@ -41,7 +41,6 @@ public class MenuScreen extends AbstractGameScreen
 
     private Image imgInfo;
 
-    private Image imgCoins;
 
     private Image imgBunny;
 
@@ -248,14 +247,12 @@ public class MenuScreen extends AbstractGameScreen
     private Table buildObjectsLayer()
     {
         Table layer = new Table();
-        //+ coins
-        imgCoins = new Image(skinCanyonBunny, "coins");
-        layer.addActor(imgCoins);
-        imgCoins.setPosition(135, 80);
+  
         //+ Bunny
         imgBunny = new Image(skinCanyonBunny, "bunny");
         layer.addActor(imgBunny);
-        imgBunny.setPosition(355, 40);
+        imgBunny.setPosition(90, 70);
+        imgBunny.scaleBy(-.2f);
 
         return layer;
     }
@@ -265,7 +262,12 @@ public class MenuScreen extends AbstractGameScreen
         Table layer = new Table();
         //+ background
         imgBackground = new Image(skinCanyonBunny, "background");
+
+        imgBackground.scaleBy(-.1f,0f);
+        imgBackground.scaleBy(.1f);
+        imgBackground.moveBy(-100, 0);
         layer.add(imgBackground);
+        
         return layer;
     }
 

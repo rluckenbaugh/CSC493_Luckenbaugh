@@ -34,7 +34,7 @@ bigbone
   index: -1
 bronze
   rotate: false
-  xy: 792, 223
+  xy: 793, 176
   size: 40, 52
   orig: 40, 52
   offset: 0, 0
@@ -76,21 +76,21 @@ dog1blue
   index: -1
 dog1pink
   rotate: false
-  xy: 229, 13
+  xy: 296, 13
   size: 65, 64
   orig: 65, 64
   offset: 0, 0
   index: -1
 dog2blue
   rotate: false
-  xy: 296, 13
+  xy: 363, 13
   size: 65, 64
   orig: 65, 64
   offset: 0, 0
   index: -1
 dog2pink
   rotate: false
-  xy: 363, 13
+  xy: 755, 343
   size: 65, 64
   orig: 65, 64
   offset: 0, 0
@@ -111,14 +111,14 @@ dog3pink
   index: -1
 dog4blue
   rotate: false
-  xy: 755, 343
+  xy: 497, 9
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 dog4pink
   rotate: false
-  xy: 497, 9
+  xy: 678, 263
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -132,14 +132,14 @@ dog_jump
   index: 1
 dog_jump
   rotate: false
-  xy: 755, 277
+  xy: 676, 197
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: 2
 dog_run
   rotate: false
-  xy: 755, 277
+  xy: 676, 197
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
@@ -160,28 +160,28 @@ doghouse
   index: -1
 dogpoop
   rotate: false
-  xy: 678, 282
+  xy: 755, 296
   size: 66, 45
   orig: 66, 45
   offset: 0, 0
   index: -1
 edge
   rotate: false
-  xy: 673, 113
+  xy: 809, 230
   size: 16, 64
   orig: 16, 64
   offset: 0, 0
   index: -1
 flower1
   rotate: false
-  xy: 821, 365
+  xy: 839, 363
   size: 34, 43
   orig: 34, 43
   offset: 0, 0
   index: -1
 flower2
   rotate: false
-  xy: 691, 132
+  xy: 823, 296
   size: 29, 45
   orig: 29, 45
   offset: 0, 0
@@ -195,21 +195,21 @@ gold
   index: -1
 grass
   rotate: false
-  xy: 821, 290
+  xy: 875, 372
   size: 35, 32
   orig: 35, 32
   offset: 0, 0
   index: -1
 grass2
   rotate: false
-  xy: 879, 410
+  xy: 921, 410
   size: 25, 30
   orig: 25, 30
   offset: 0, 0
   index: -1
 grass3
   rotate: false
-  xy: 741, 220
+  xy: 742, 174
   size: 49, 55
   orig: 49, 55
   offset: 0, 0
@@ -286,14 +286,14 @@ ground9
   index: -1
 heart1
   rotate: false
-  xy: 676, 179
+  xy: 840, 408
   size: 40, 36
   orig: 40, 36
   offset: 0, 0
   index: -1
 heart2
   rotate: false
-  xy: 840, 410
+  xy: 882, 406
   size: 37, 34
   orig: 37, 34
   offset: 0, 0
@@ -307,9 +307,23 @@ heart3
   index: -1
 middle
   rotate: false
-  xy: 676, 217
+  xy: 744, 231
   size: 63, 63
   orig: 63, 63
+  offset: 0, 0
+  index: -1
+mudEdge
+  rotate: false
+  xy: 822, 343
+  size: 15, 65
+  orig: 15, 65
+  offset: 0, 0
+  index: -1
+mudMiddle
+  rotate: false
+  xy: 229, 12
+  size: 65, 65
+  orig: 65, 65
   offset: 0, 0
   index: -1
 silver
@@ -321,7 +335,7 @@ silver
   index: -1
 treat
   rotate: false
-  xy: 821, 324
+  xy: 827, 255
   size: 31, 39
   orig: 31, 39
   offset: 0, 0

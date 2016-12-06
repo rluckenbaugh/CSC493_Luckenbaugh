@@ -23,6 +23,8 @@ public class Constants
 
     //location of image file for level 01
     public static final String LEVEL_01 = "levels/levelmap_perkypooch01.png";
+    //location of image file for level 02
+    public static final String LEVEL_02 = "levels/levelmap_perkypooch02.png";
 
     //Amount of extra lives in level start
     public static final int LIVES_START = 3;

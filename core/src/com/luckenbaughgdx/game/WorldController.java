@@ -59,11 +59,15 @@ public class WorldController extends InputAdapter implements Disposable
     float scoreVisual;
 
     public boolean goalReached;
-    
+
     public boolean spacePressed;
 
     // Box2D Collisions
     public World b2World;
+
+    int levelCount = 0;
+
+    Array<String> levels = new Array<String>();
 
     public WorldController(Game game)
     {
@@ -76,12 +80,15 @@ public class WorldController extends InputAdapter implements Disposable
      */
     private void initLevel()
     {
-        score = 0;
         scoreVisual = score;
         goalReached = false;
-        level = new Level(Constants.LEVEL_01);
+        if (levelCount >= levels.size)
+        {
+            backToMenu();
+        }
+        else
+            level = new Level(levels.get(levelCount));
         cameraHelper.setTarget(level.pooch);
-
         initPhysics();
     }
 
@@ -112,6 +119,8 @@ public class WorldController extends InputAdapter implements Disposable
             origin.y = rock.bounds.height / 2.0f;
             rockpolygonShape.setAsBox(rock.bounds.width / 2.0f, rock.bounds.height / 2.0f, origin, 0);
             FixtureDef rockfixtureDef = new FixtureDef();
+            if(rock.getLandType()==2)
+                rockfixtureDef.friction = 0.4f;
             rockfixtureDef.shape = rockpolygonShape;
             rockbody.createFixture(rockfixtureDef);
             rockpolygonShape.dispose();
@@ -139,7 +148,7 @@ public class WorldController extends InputAdapter implements Disposable
         // fixtureDef.friction = 0.5f;
         poochBody.createFixture(poochfixtureDef);
         poochpolygonShape.dispose();
-        
+
         // For bone
         Bone bone = level.bone;
         BodyDef bonebodyDef = new BodyDef();
@@ -227,6 +236,9 @@ public class WorldController extends InputAdapter implements Disposable
         objectsToRemove = new Array<AbstractGameObject>();
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
+
+        levels.add(Constants.LEVEL_01);
+        levels.add(Constants.LEVEL_02);
         lives = Constants.LIVES_START - 1;
         livesVisual = lives;
         timeLeftGameOverDelay = 0;
@@ -235,7 +247,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     private void backToMenu()
     {
-        //switch to menu screen
+        //switch to high score menu screen
         game.setScreen(new HighScoreScreen(game, score));
     }
 
@@ -254,7 +266,6 @@ public class WorldController extends InputAdapter implements Disposable
     {
         return level.pooch.position.y < -5;
     }
-  
 
     public void flagForRemoval(AbstractGameObject obj)
     {
@@ -304,7 +315,6 @@ public class WorldController extends InputAdapter implements Disposable
             objectsToRemove.removeRange(0, objectsToRemove.size - 1);
         }
 
-
         b2World.step(deltaTime, 8, 3); // Tell the Box2D world to update.
         level.update(deltaTime);
         //checkForCollisions();
@@ -313,17 +323,21 @@ public class WorldController extends InputAdapter implements Disposable
         handleDebugInput(deltaTime);
         if (isGameOver() || goalReached)
         {
-          /*  if(goalReached)
-            {
-                GamePreferences prefs = GamePreferences.instances;
-                prefs.loadScores();
-                prefs.addHighScore(score);
-                prefs.saveScores();
-            }*/
-                
             timeLeftGameOverDelay -= deltaTime;
-            if (timeLeftGameOverDelay < 0)
-                backToMenu();
+            if (goalReached)
+            {
+                levelCount++;
+                if (timeLeftGameOverDelay < 0)
+                    if (levelCount >= levels.size)
+                    {
+                        backToMenu();
+                    }
+
+                initLevel();
+
+            }
+            backToMenu();
+
         }
         else
         {
@@ -428,7 +442,7 @@ public class WorldController extends InputAdapter implements Disposable
 
     private void handleInputGame(float deltaTime)
     {
-        
+
         if (cameraHelper.hasTarget(level.pooch))
         {
             //player movement
@@ -454,7 +468,7 @@ public class WorldController extends InputAdapter implements Disposable
             {
 
                 level.pooch.setJumping(true);
-                
+
             }
 
             else

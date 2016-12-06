@@ -36,6 +36,8 @@ public class Level
 
     public Array<Pile> piles;
 
+    public Array<Rock> mud;
+
     /*
      * set the colors in the level map
      */
@@ -43,6 +45,7 @@ public class Level
     {
         EMPTY(0, 0, 0), //black
         ROCK(0, 255, 0), // green
+        MUD(100, 100, 100), //grey
         PLAYER_SPAWNPOINT(255, 255, 255), //white
         ITEM_BEE(255, 0, 0), //red
         ITEM_TREAT(255, 255, 0), //yellow;
@@ -126,7 +129,24 @@ public class Level
                 {
                     if (lastPixel != currentPixel)
                     {
-                        obj = new Rock();
+                        obj = new Rock(1);
+                        float heightIncreaseFactor = 0.75f;
+                        offsetHeight = -3.25f;
+                        obj.position.set(pixelX, baseHeight * obj.dimension.y * heightIncreaseFactor + offsetHeight);
+                        rocks.add((Rock) obj);
+                    }
+                    else
+                    {
+                        rocks.get(rocks.size - 1).increaseLength(1);
+                    }
+                }
+                
+                //rock
+                else if (BLOCK_TYPE.MUD.sameColor(currentPixel))
+                {
+                    if (lastPixel != currentPixel)
+                    {
+                        obj = new Rock(2);
                         float heightIncreaseFactor = 0.75f;
                         offsetHeight = -3.25f;
                         obj.position.set(pixelX, baseHeight * obj.dimension.y * heightIncreaseFactor + offsetHeight);
