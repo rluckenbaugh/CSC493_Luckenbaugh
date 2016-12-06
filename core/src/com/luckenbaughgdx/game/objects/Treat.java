@@ -30,6 +30,7 @@ public class Treat extends AbstractGameObject
 
         //Set bounding box for collection detection
         bounds.set(0, 0, dimension.x, dimension.y);
+        origin.set(dimension.x/2,dimension.y/2);
 
         collected = false;
 
@@ -43,12 +44,10 @@ public class Treat extends AbstractGameObject
     @Override
     public void render(SpriteBatch batch)
     {
-        if (collected)
-            return;
 
         TextureRegion reg = null;
         reg = regTreat;
-        batch.draw(reg.getTexture(), position.x, position.y, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
+        batch.draw(reg.getTexture(), position.x-origin.x, position.y-origin.y, origin.x, origin.y, dimension.x, dimension.y, scale.x, scale.y, rotation, reg.getRegionX(), reg.getRegionY(), reg.getRegionWidth(),
                 reg.getRegionHeight(), false, false);
     }
 
@@ -57,6 +56,6 @@ public class Treat extends AbstractGameObject
      */
     public int getScore()
     {
-        return 100;
+        return 150;
     }
 }

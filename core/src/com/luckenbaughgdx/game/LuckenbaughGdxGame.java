@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.luckenbaughgdx.game.screens.HighScoreScreen;
 import com.luckenbaughgdx.game.screens.MenuScreen;
 import com.luckenbaughgdx.game.util.AudioManager;
 import com.luckenbaughgdx.game.util.GamePreferences;

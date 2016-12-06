@@ -25,11 +25,13 @@ import com.luckenbaughgdx.game.objects.Pile;
 import com.luckenbaughgdx.game.objects.Pooch;
 import com.luckenbaughgdx.game.objects.Treat;
 import com.luckenbaughgdx.game.objects.Rock;
+import com.luckenbaughgdx.game.screens.HighScoreScreen;
 import com.luckenbaughgdx.game.screens.MenuScreen;
 import com.luckenbaughgdx.game.util.AudioManager;
 import com.luckenbaughgdx.game.util.CameraHelper;
 import com.luckenbaughgdx.game.util.CollisionHandler;
 import com.luckenbaughgdx.game.util.Constants;
+import com.luckenbaughgdx.game.util.GamePreferences;
 
 /*
  * control the objects int he game so that the world renderer can draw it
@@ -153,7 +155,7 @@ public class WorldController extends InputAdapter implements Disposable
         PolygonShape bonepolygonShape = new PolygonShape();
         origin.x = (bone.bounds.width) / 2.0f;
         origin.y = (bone.bounds.height) / 2.0f;
-        bonepolygonShape.setAsBox((bone.bounds.width - 0.7f) / 2.0f, (bone.bounds.height - 0.15f) / 2.0f, origin, 0);
+        bonepolygonShape.setAsBox((bone.bounds.width) / 2.0f, (bone.bounds.height - 0.15f) / 2.0f, origin, 0);
 
         FixtureDef bonefixtureDef = new FixtureDef();
         bonefixtureDef.shape = bonepolygonShape;
@@ -234,7 +236,7 @@ public class WorldController extends InputAdapter implements Disposable
     private void backToMenu()
     {
         //switch to menu screen
-        game.setScreen(new MenuScreen(game));
+        game.setScreen(new HighScoreScreen(game, score));
     }
 
     /*
@@ -311,6 +313,14 @@ public class WorldController extends InputAdapter implements Disposable
         handleDebugInput(deltaTime);
         if (isGameOver() || goalReached)
         {
+          /*  if(goalReached)
+            {
+                GamePreferences prefs = GamePreferences.instances;
+                prefs.loadScores();
+                prefs.addHighScore(score);
+                prefs.saveScores();
+            }*/
+                
             timeLeftGameOverDelay -= deltaTime;
             if (timeLeftGameOverDelay < 0)
                 backToMenu();
@@ -467,13 +477,14 @@ public class WorldController extends InputAdapter implements Disposable
             carrot.scale.set(carrotScale, carrotScale);
             // create box2d body for carrot with start position
             //and angle of rotation
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.position.set(pos);
-            bodyDef.position.add(x, y);
-            bodyDef.angle = rotation;
-            Body body = b2World.createBody(bodyDef);
-            body.setType(BodyType.DynamicBody);
-            carrot.body = body;
+            BodyDef carbodyDef = new BodyDef();
+            carbodyDef.position.set(pos);
+            carbodyDef.position.add(x, y);
+            carbodyDef.angle = rotation;
+            Body carbody = b2World.createBody(carbodyDef);
+            carbody.setType(BodyType.DynamicBody);
+            carbody.setUserData(carrot);
+            carrot.body = carbody;
             //create rectangular shape for carrot to allow interactionswith other objects
             PolygonShape polygonShape = new PolygonShape();
             float halfWidth = carrot.bounds.width / 2.0f * carrotScale;
@@ -485,10 +496,10 @@ public class WorldController extends InputAdapter implements Disposable
             fixtureDef.density = 50;
             fixtureDef.restitution = 0.5f;
             fixtureDef.friction = 0.5f;
-            body.createFixture(fixtureDef);
+            carbody.createFixture(fixtureDef);
             polygonShape.dispose();
             //finally add new carrot to list for updating/rendering
-            level.treats.add(carrot);
+            level.endTreats.add(carrot);
         }
     }
 

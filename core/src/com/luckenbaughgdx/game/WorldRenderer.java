@@ -25,7 +25,7 @@ public class WorldRenderer implements Disposable
 
     private WorldController worldController;
 
-    private static final boolean DEBUG_DRAW_BOX2D_WORLD = false;
+    private static final boolean DEBUG_DRAW_BOX2D_WORLD = true;
     
     private Box2DDebugRenderer b2ddebugRenderer;
 

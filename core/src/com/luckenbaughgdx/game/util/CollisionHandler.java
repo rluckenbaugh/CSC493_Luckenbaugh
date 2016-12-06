@@ -196,7 +196,8 @@ public class CollisionHandler implements ContactListener
             world.timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_FINISHED;
             Vector2 centerPosBunnyHead = new Vector2(world.level.pooch.position);
             centerPosBunnyHead.x += world.level.pooch.bounds.width;
-            world.spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
+            //world.spawnCarrots(centerPosBunnyHead, Constants.CARROTS_SPAWN_MAX, Constants.CARROTS_SPAWN_RADIUS);
+
         }
     }
 

@@ -32,7 +32,7 @@ public class Level
 
     public Array<Treat> treats;
 
-    public Array<Treat> treats2;
+    public Array<Treat> endTreats;
 
     public Array<Pile> piles;
 
@@ -94,7 +94,7 @@ public class Level
         //objects
         rocks = new Array<Rock>();
         treats = new Array<Treat>();
-        treats2 = new Array<Treat>();
+        endTreats = new Array<Treat>();
         piles = new Array<Pile>();
         bees = new Array<Bee>();
 
@@ -185,7 +185,7 @@ public class Level
                 else if (BLOCK_TYPE.ITEM_BONE.sameColor(currentPixel))
                 {
                     obj = new Bone();
-                    offsetHeight = 1.0f;
+                    offsetHeight = -3.0f;
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     bone = (Bone) obj;
                 }
@@ -252,8 +252,8 @@ public class Level
         //draw player character
         pooch.render(batch);
 
-        //draw carrots
-        for (Treat treat : treats2)
+        //draw carrots/treats
+        for (Treat treat : endTreats)
             treat.render(batch);
 
     }
@@ -271,7 +271,7 @@ public class Level
             treat.update(deltaTime);
         for (Pile feather : piles)
             feather.update(deltaTime);
-        for (Treat carrot : treats2)
+        for (Treat carrot : endTreats)
             carrot.update(deltaTime);
         for (Bee bee : bees)
             bee.update(deltaTime);
